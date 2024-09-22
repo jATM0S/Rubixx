@@ -1,0 +1,3 @@
+# Ignore virtual environments
+.venv/
+rubics_cube_detection/venv/
