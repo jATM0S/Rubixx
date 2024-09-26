@@ -1,7 +1,13 @@
+from flask import Flask, request, jsonify
 import cv2
 import numpy as np
+import base64
 
-# Function to get the color name based on HSV values
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
+
 def get_color_name(h, s, v):
     if s < 10 and v > 200:
         return "White"
@@ -21,17 +27,18 @@ def get_color_name(h, s, v):
         return "Purple"
     return "Unknown"
 
-# Start capturing video from the webcam
-cap = cv2.VideoCapture(0)
-
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        break
+@app.route('/scan', methods=['POST'])
+def scan():
+    data = request.json
+    image_data = data['image']
+    
+    # Decode the base64 image
+    img_data = base64.b64decode(image_data)
+    img_array = np.frombuffer(img_data, np.uint8)
+    frame = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
 
     hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    # Define color ranges for the Rubik's Cube
     color_ranges = {
         "red": [(0, 100, 100), (10, 255, 255), (160, 100, 100), (180, 255, 255)],
         "green": [(40, 100, 100), (80, 255, 255)],
@@ -40,6 +47,8 @@ while True:
         "white": [(0, 0, 200), (180, 25, 255)],
         "orange": [(10, 100, 100), (25, 255, 255)]
     }
+
+    results = []
 
     for color, ranges in color_ranges.items():
         if len(ranges) == 2:
@@ -54,42 +63,25 @@ while True:
 
         for contour in contours:
             area = cv2.contourArea(contour)
-
-            # Filter by area (ignore too small or too large objects)
             if 500 < area < 5000:
-                # Approximate the contour to get more accurate shape
                 perimeter = cv2.arcLength(contour, True)
                 approx = cv2.approxPolyDP(contour, 0.02 * perimeter, True)
-
-                # Filter based on the number of approximated corners (square detection)
                 if len(approx) == 4:
                     x, y, w, h = cv2.boundingRect(approx)
-
-                    # Aspect ratio filtering (cube's face is roughly square)
                     aspect_ratio = w / float(h)
-                    if 0.9 <= aspect_ratio <= 1.1:  # Close to square shape
-                        # Get the region of interest (the square area)
+                    if 0.9 <= aspect_ratio <= 1.1:
                         roi = hsv_frame[y:y+h, x:x+w]
-
-                        # Calculate the average HSV color in the square
                         avg_h = np.mean(roi[:, :, 0])
                         avg_s = np.mean(roi[:, :, 1])
                         avg_v = np.mean(roi[:, :, 2])
-
-                        # Get the color name based on the average HSV values
                         color_name = get_color_name(avg_h, avg_s, avg_v)
 
-                        # Draw a bounding box around the detected square
-                        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+                        results.append({
+                            "color": color_name,
+                            "position": (x, y, w, h)
+                        })
 
-                        # Display the color name on the square
-                        cv2.putText(frame, color_name, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    return jsonify(results)
 
-    # Show the frame with detected squares and labeled colors
-    cv2.imshow('Square Detection and Color Labeling', frame)
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-cap.release()
-cv2.destroyAllWindows()
+if __name__ == '__main__':
+    app.run(debug=True)
