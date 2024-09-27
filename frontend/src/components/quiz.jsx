@@ -18,13 +18,13 @@ const Quiz = () => {
   };
 
   return (
-    <div className="w-full h-screen bg-no-repeat bg-black bg-center bg-contain p-[20px] pl-16 flex items-center gap-12">
-      <div className="w-1/2 ">
+    <div className="w-full h-screen bg-no-repeat bg-black bg-center bg-contain p-[20px] md:pl-16 flex flex-col md:flex-row items-center gap-12">
+      <div className="md:w-1/2 ">
         <video src={faq} autoPlay loop muted className="w-full h-auto" />
       </div>
-      <div className="w-1/2 px-36 pb-16 rounded-2xl flex flex-col gap-12 shadow-lg">
+      <div className="md:w-1/2 md:px-36 pb-16 rounded-2xl flex flex-col gap-12 shadow-lg">
         <div className="text-white text-center">
-          <h1 className="text-3xl font-bold shadow-md rounded-2xl p-4 py-8 shadow-blue-200 mb-16">
+          <h1 className="text-3xl font-bold shadow-md rounded-2xl p-4 md:py-8 shadow-blue-200 mb-16">
             Do you know these facts about your Rubik's Cube?
           </h1>
           <button

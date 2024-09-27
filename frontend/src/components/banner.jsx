@@ -7,9 +7,11 @@ const Banner = () => {
 
   return (
     <div className="w-full h-screen bg-cover bg-center bg-black">
-      <div className="w-full h-[500px] inline-flex items-center">
-        <div className="w-1/2 p-8 ml-6">
-          <h1 className="text-5xl font-bold text-white mb-4">Rubixx</h1>
+      <div className="w-full h-full  md:inline-flex items-center">
+        <div className="md:w-1/2 p-8 md:ml-6 text-center md:text-left">
+          <h1 className="text-5xl font-bold text-white mb-4 mt-12 md:mt-0">
+            Rubixx
+          </h1>
           <p className="text-xl text-gray-300 mb-2">Rubik's Cube Solver</p>
           <p className="text-lg text-gray-400 mb-4">
             Our solver is designed to capture images of a Rubik's cube face,
@@ -25,7 +27,11 @@ const Banner = () => {
             Scan the Cube
           </button>
         </div>
-        <img src={home} alt="Rubik's Cube Solver" className="mt-24 w-1/2" />
+        <img
+          src={home}
+          alt="Rubik's Cube Solver"
+          className="md:mt-24 md:w-1/2"
+        />
       </div>
 
       {popupOpen && <CameraPopup onClose={() => setPopupOpen(false)} />}
