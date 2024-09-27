@@ -47,6 +47,8 @@ def scan():
         "white": [(0, 0, 200), (180, 25, 255)],
         "orange": [(10, 100, 100), (25, 255, 255)]
     }
+   
+
 
     results = []
 
@@ -63,7 +65,7 @@ def scan():
 
         for contour in contours:
             area = cv2.contourArea(contour)
-            if 500 < area < 5000:
+            if area > 100:
                 perimeter = cv2.arcLength(contour, True)
                 approx = cv2.approxPolyDP(contour, 0.02 * perimeter, True)
                 if len(approx) == 4:
