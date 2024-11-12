@@ -1,6 +1,6 @@
-from django.urls import path
-from . import views  # Correct import of views
+from django.urls import path, include
+from .views import solve_cube_view
 
 urlpatterns = [
-    path('', views.cube, name='some_view'),  
+    path('', solve_cube_view , name='solve' ),  # Include URLs from the scramble app
 ]
