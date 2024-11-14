@@ -1,4 +1,4 @@
-from . import moves
+import moves
 
 def topCornersOrienation(rubiks_cube):
     sequence=[]
@@ -12,7 +12,6 @@ def topCornersOrienation(rubiks_cube):
         print("matching top corner")
         attempt=0
         while rubiks_cube['U3']!=rubiks_cube['U5'] and attempt <4:
-            attempt+=1
             cornerMatchSequence.extend(['r','d',"r'","d'"])
             for x in ['r','d',"r'","d'"]:
                 rubiks_cube=moves.execute_move(rubiks_cube,x)
