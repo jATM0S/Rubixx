@@ -110,6 +110,7 @@ def topCrossOrientation(rubiks_cube):
             moves.print_2d_cube(rubiks_cube)
     orientation_moves=correct_orientation(rubiks_cube)
     print(orientation_moves)
+    sequence.extend(orientation_moves)
     for x in orientation_moves:
         rubiks_cube=moves.execute_move(rubiks_cube,x)
         moves.print_2d_cube(rubiks_cube)

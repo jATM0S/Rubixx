@@ -77,10 +77,14 @@ def bottomCorners(rubiks_cube):
         face_moves=bring_piece_to_F7(rubiks_cube,corner_pieces,leftCorner_piece)
         print(face_moves)
         for x in face_moves:
+            print(x)
             rubiks_cube=moves.execute_move(rubiks_cube,x)
             moves.print_2d_cube(rubiks_cube)
         sequence.extend(face_moves)
         rubiks_cube=moves.rotateLeft(rubiks_cube)
+        
+        print("next face")
+        print("rl")
         moves.print_2d_cube(rubiks_cube)
         sequence.append('rl')
     return sequence,rubiks_cube

@@ -44,5 +44,3 @@ def dot(rubiks_cube):
         moves.print_2d_cube(rubiks_cube)
     sequence.extend(L(rubiks_cube))
     return sequence
-
-# print(line(rubiks_cube))

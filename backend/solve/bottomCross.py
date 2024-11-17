@@ -57,7 +57,6 @@ def bottomCross(rubiks_cube):
         if rubiks_cube['F8']==rubiks_cube['F5'] and rubiks_cube['R8']==rubiks_cube['R5'] and rubiks_cube['B8']==rubiks_cube['B5'] and rubiks_cube['L8']==rubiks_cube['L5'] and rubiks_cube['D2']==rubiks_cube['D5']and rubiks_cube['D4']==rubiks_cube['D5'] and rubiks_cube['D6']==rubiks_cube['D5'] and rubiks_cube['D8']==rubiks_cube['D5']:
             return sequence,rubiks_cube
         
-        moves.print_2d_cube(rubiks_cube)
         required_side_pieces=dectect_required_side_pieces(rubiks_cube,side_pieces)
         print(required_side_pieces)
 
@@ -71,6 +70,8 @@ def bottomCross(rubiks_cube):
             rubiks_cube = moves.execute_move(rubiks_cube, move)
             moves.print_2d_cube(rubiks_cube) 
         
+        print("next face")
+        print('rl')
         rubiks_cube=moves.rotateLeft(rubiks_cube)
         moves.print_2d_cube(rubiks_cube)
         sequence.extend(face_moves)
@@ -79,4 +80,3 @@ def bottomCross(rubiks_cube):
 
     return sequence,rubiks_cube
 
-# print(bottomCross(rubiks_cube))
