@@ -1,6 +1,3 @@
-cont='y'
-option='y'
-
 def execute_move(rubiks_cube,move):
     if move == "f":
         return F(rubiks_cube)
@@ -34,7 +31,6 @@ def execute_move(rubiks_cube,move):
         return rotateUp(rubiks_cube) 
     elif move == "rd":
         return rotateDown(rubiks_cube) 
-# corrected f f' r' r u u' l l' b b'
 def F(rubiks_cube):
         # Step 1: Rotate the front face clockwise
         new_cube = rubiks_cube.copy()
@@ -98,7 +94,6 @@ def R(rubiks_cube):
     new_cube['R7'], new_cube['R8'], new_cube['R9'] = rubiks_cube['R9'], rubiks_cube['R6'], rubiks_cube['R3']
     
     # Step 2: Update the adjacent edges
-    # You only need to update 9 stickers here
     new_cube['U9'],new_cube['U6'],new_cube['U3']=rubiks_cube["F9"],rubiks_cube["F6"],rubiks_cube["F3"]
     new_cube['F9'],new_cube['F6'],new_cube['F3']=rubiks_cube["D9"],rubiks_cube["D6"],rubiks_cube["D3"]
     new_cube['D9'],new_cube['D6'],new_cube['D3']=rubiks_cube["B1"],rubiks_cube["B4"],rubiks_cube["B7"]
@@ -244,19 +239,7 @@ def rotateDown (rubiks_cube):
     new_cube=L(new_cube)
     return new_cube
 
-rubiks_cube = {
-    'F1': 'G', 'F2': 'G', 'F3': 'G', 'F4': 'G', 'F5': 'G', 'F6': 'G', 'F7': 'G', 'F8': 'G', 'F9': 'G',  
-    'B1': 'B', 'B2': 'B', 'B3': 'B', 'B4': 'B', 'B5': 'B', 'B6': 'B', 'B7': 'B', 'B8': 'B', 'B9': 'B',  
-    'L1': 'R', 'L2': 'R', 'L3': 'R', 'L4': 'R', 'L5': 'R', 'L6': 'R', 'L7': 'R', 'L8': 'R', 'L9': 'R',  
-    'R1': 'O', 'R2': 'O', 'R3': 'O', 'R4': 'O', 'R5': 'O', 'R6': 'O', 'R7': 'O', 'R8': 'O', 'R9': 'O',  
-    'U1': 'Y', 'U2': 'Y', 'U3': 'Y', 'U4': 'Y', 'U5': 'Y', 'U6': 'Y', 'U7': 'Y', 'U8': 'Y', 'U9': 'Y',  
-    'D1': 'W', 'D2': 'W', 'D3': 'W', 'D4': 'W', 'D5': 'W', 'D6': 'W', 'D7': 'W', 'D8': 'W', 'D9': 'W'   
-}
-
-def print_2d_cube(cube):
-        # Define a function to display each face of the Rubik's cube in a 2D layout
-        # U, L, F, R, B, D faces
-        
+def print_2d_cube(cube):        
         # Print the Upper face (U)
         print("       {} {} {}".format(cube['U1'], cube['U2'], cube['U3']))
         print("       {} {} {}".format(cube['U4'], cube['U5'], cube['U6']))
@@ -287,50 +270,3 @@ def print_2d_cube(cube):
         print("       {} {} {}".format(cube['D4'], cube['D5'], cube['D6']))
         print("       {} {} {}".format(cube['D7'], cube['D8'], cube['D9']))
 
-# Sample Rubik's cube (make sure to initialize rubiks_cube properly before this loop)
-
-# testing moves
-# while cont == 'y':
-
-#     option = input("What move to do? ")
-    
-#     if option == "f":
-#         rubiks_cube = F(rubiks_cube)
-#     elif option == "f'":
-#         rubiks_cube = F_inv(rubiks_cube) 
-#     elif option == "r":
-#         rubiks_cube = R(rubiks_cube) 
-#     elif option == "r'":
-#         rubiks_cube = R_inv(rubiks_cube) 
-#     elif option == "l":
-#         rubiks_cube = L(rubiks_cube) 
-#     elif option == "l'":
-#         rubiks_cube = L_inv(rubiks_cube) 
-#     elif option == "u":
-#         rubiks_cube = U(rubiks_cube) 
-#     elif option == "u'":
-#         rubiks_cube = U_inv(rubiks_cube) 
-#     elif option == "d":
-#         rubiks_cube = D(rubiks_cube) 
-#     elif option == "d'":
-#         rubiks_cube = D_inv(rubiks_cube) 
-#     elif option == "b":
-#         rubiks_cube = B(rubiks_cube) 
-#     elif option == "b'":
-#         rubiks_cube = B_inv(rubiks_cube) 
-#     elif option == "rr":
-#         rubiks_cube = rotateRight(rubiks_cube) 
-#     elif option == "rl":
-#         rubiks_cube = rotateLeft(rubiks_cube) 
-#     elif option == "ru":
-#         rubiks_cube = rotateUp(rubiks_cube) 
-#     elif option == "rd":
-#         rubiks_cube = rotateDown(rubiks_cube) 
-#     else:
-#         print("Invalid move. Please try again.")
-
-#     print_2d_cube(rubiks_cube)  # Print the current state of the cube
-#     # Ask if the user wants to continue
-#     cont = input("Option y if you want to continue: ").strip().lower()
-
-# print("Exiting the program.")

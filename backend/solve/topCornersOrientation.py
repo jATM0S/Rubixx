@@ -1,4 +1,4 @@
-import moves
+from . import moves
 
 def topCornersOrienation(rubiks_cube):
     sequence=[]
@@ -47,5 +47,3 @@ def topCornersOrienation(rubiks_cube):
 
     return sequence,rubiks_cube
     
-# moves.print_2d_cube(rubiks_cube)
-# print(topCornersOrienation(rubiks_cube))

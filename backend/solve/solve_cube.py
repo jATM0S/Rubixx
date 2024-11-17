@@ -1,9 +1,4 @@
-from django.test import SimpleTestCase
-
 from . import moves
-from . import validate
-from . import solve_cube
-from . import randomize
 from . import bottomCross
 from . import bottomCorners
 from . import secondLayer
@@ -11,9 +6,65 @@ from . import topCross
 from . import topCrossOrientation
 from . import topCorners
 from . import topCornersOrientation
+from . import validate
 
+def optimize(sequence):
+    x=0
+    while x in range(len(sequence)):
+        first=sequence[x]
+        if x+1<len(sequence):
+            second=sequence[x+1]
+        else: second=None
+        if x+2<len(sequence):
+            third=sequence[x+2]
+        else:third=None
+        if x+3<len(sequence):
+            fourth=sequence[x+3]
+        else: fourth=None
 
-def solve_cube_test(rubiks_cube):
+        e4=False
+        if fourth: 
+            if first==second==third==fourth:
+                print(f"remove 4 repeat at index {x}")
+                print(first,second,third,fourth)
+                print(sequence)
+                del sequence[x:x+4]
+                print(sequence)
+                x-=1
+                e4=True
+
+        e3=False
+        if not e4 and third:
+            if first==second==third:
+                print(f"remove 3 repeat at index {x}")
+                print(first,second,third)
+                print(sequence)
+                if first.endswith("'"):
+                    sequence[x:x+3]=first[:-1]
+                else:
+                    if first=='rl':
+                        sequence[x:x+3]=['rr']
+                    elif first=='rr':
+                        sequence[x:x+3]=['rl']
+                    else:
+                        sequence[x:x+3]=[first+"'"]
+                print(sequence)
+                e3=True
+                x-=1
+        
+        if not e3 and not e4 and second:
+            if first+"'"==second or first==second+"'" or (first=='rl' and second=='rr') or (first=='rr' and second=='rl'):
+                print(f"remove two opossite at index {x}")
+                print(first,second)
+                print(sequence)
+                del sequence[x:x+2]
+                print(sequence)
+                x-=1
+
+        x+=1
+    return sequence
+
+def solve_cube(rubiks_cube):
     sequence=[]
 
     solvable,error=validate.checkCube(rubiks_cube)
@@ -118,98 +169,9 @@ def solve_cube_test(rubiks_cube):
     if solvable==False:return [],False,(f'Step 7 failed, there is a problem with corner of {rubiks_cube["U5"]} color.')
         
     moves.print_2d_cube(rubiks_cube)
+    sequence=optimize(sequence)
+    for x in sequence:
+        sequenceCube=moves.execute_move(sequenceCube,x)
+    if sequenceCube!=rubiks_cube:
+        return [],False,"sequence error"
     return sequence,True,""
-
-
-def testValidation(cube):
-    cubes=[]
-    total=0
-    noOftests=int(input("How many tests to run? "))
-    for x in range (noOftests):
-        try:
-            rubiks_cube=randomize.randomize(cube)
-            sequence,rubiks_cube=bottomCross.bottomCross(rubiks_cube)
-            sequence,rubiks_cube=bottomCorners.bottomCorners(rubiks_cube)
-            sequence,rubiks_cube=secondLayer.secondLayer(rubiks_cube)
-            sequence,rubiks_cube=topCross.top_cross(rubiks_cube)
-            sequence,rubiks_cube=topCrossOrientation.topCrossOrientation(rubiks_cube)
-            sequence,rubiks_cube=topCorners.topCorners(rubiks_cube)
-            sequence,rubiks_cube=topCornersOrientation.topCornersOrienation(rubiks_cube)
-            solved=validate.checkTopCornersOrietation(rubiks_cube)
-            if not solved:
-                cubes.append(rubiks_cube)
-            total+=len(sequence)
-        except Exception as e:
-            cubes.append(rubiks_cube)
-
-    if not cubes:
-        print("all test cases passed")
-        return total/noOftests
-    else:
-        print("unsolved cubes")
-        for x in cubes:
-            moves.print_2d_cube(x)
-        print(len(cubes))
-        return cubes
-
-class rubiks_test(SimpleTestCase):
-    def setUp(self):
-        self.rubiks_cube={'F1': 'O', 'F2': 'R', 'F3': 'O', 'F4': 'Y', 'F5': 'R', 'F6': 'O', 'F7': 'B', 'F8': 'Y', 'F9': 'Y', 'R1': 'G', 'R2': 'O', 'R3': 'B', 'R4': 'B', 'R5': 'G', 'R6': 'B', 'R7': 'G', 'R8': 'G', 'R9': 'W', 'B1': 'O', 'B2': 'Y', 'B3': 'W', 'B4': 'W', 'B5': 'O', 'B6': 'O', 'B7': 'R', 'B8': 'O', 'B9': 'O', 'L1': 'R', 'L2': 'R', 'L3': 'G', 'L4': 'W', 'L5': 'B', 'L6': 'G', 'L7': 'Y', 'L8': 'R', 'L9': 'R', 'U1': 'B', 'U2': 'B', 'U3': 'W', 'U4': 'W', 'U5': 'Y', 'U6': 'G', 'U7': 'Y', 'U8': 'B', 'U9': 'W', 'D1': 'Y', 'D2': 'R', 'D3': 'R', 'D4': 'G', 'D5': 'W', 'D6': 'W', 'D7': 'B', 'D8': 'Y', 'D9': 'G'}
-    # def testOptimization(self):
-    #     cubes=[]
-    #     reason=[]
-    #     totalOptimized=0
-    #     totalUnoptimized=0
-    #     # noOftests=int(input("How many tests to run? "))
-    #     noOftests=5
-    #     for x in range (noOftests):
-    #         rubiks_cube=randomize.randomize(self.rubiks_cube)
-    #         rub=rubiks_cube.copy()
-    #         sequence,solved,error=solve_cube_test(rubiks_cube)
-    #         if not solved:
-    #             cubes.append(rub)
-    #             reason.append(error)
-    #         else:
-    #             totalUnoptimized=totalUnoptimized+len(sequence)
-
-    #             sequence=solve_cube.optimize(sequence)
-    #             totalOptimized=totalOptimized+len(sequence)
-    #             for x in sequence:
-    #                 rubiks_cube=moves.execute_move(rubiks_cube,x)
-                
-    #             if validate.checkTopCornersOrietation(rubiks_cube)==False:
-    #                 solved=False
-    #                 reason.append('validation of optimization')
-                
-    #             if not solved:
-    #                 cubes.append(rub)
-
-    #     if not cubes:
-    #         print(f"all {x} test cases passed")
-    #         print(totalUnoptimized/noOftests,totalOptimized/noOftests)
-    #         return 
-    #     else:
-    #         print(cubes,reason)
-    #         return 
-    def test(self):
-        cubes=[]
-        errors=[]
-        total=0
-        noOftests=5
-        for x in range (noOftests):
-            rubiks_cube=randomize.randomize(self.rubiks_cube)
-            sequence,solved,error=solve_cube.solve_cube(self.rubiks_cube)
-            if not solved:
-                cubes.append(rubiks_cube)
-                errors.append(error)
-            total+=len(sequence)
-
-        if not cubes:
-            print(f"all {x} test cases passed")
-            print(total/noOftests)
-            return 
-        else:
-            print(cubes,errors)
-            return 
-
-# print(testValidation(rubiks_cube))

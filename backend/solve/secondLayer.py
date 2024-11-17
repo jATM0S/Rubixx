@@ -12,7 +12,6 @@ def bring_piece_to_top(rubiks_cube,unsolved_piece):
     elif(unsolved_piece==['B6','L4']):
         return secondLayerCases.piece_on_leftLeft(rubiks_cube)
 
-
 def dectect_top_pieces(rubiks_cube):
     print("dectect_top_pieces")
     pieces_on_top=[['F2','U8'],['U4','L2'],['U6','R2'],['U2','B2']]
@@ -136,5 +135,4 @@ def secondLayer(rubiks_cube):
     return sequence,rubiks_cube
 
 
-# print(secondLayer(rubiks_cube))
 
