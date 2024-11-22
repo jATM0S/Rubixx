@@ -37,9 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    #installed apps
+    'corsheaders',
     #created apps
     'solve',
+    'detectCube'
 ]
 
 MIDDLEWARE = [
@@ -50,6 +52,32 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # cors middleware
+
+]
+
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ORIGINS=[
+    "http://localhost:5173",  
+]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "authorization",
+    "x-csrftoken",
+    "x-requested-with",
+]
+CORS_EXPOSE_HEADERS = [
+    'Content-Type',
+    'Authorization',
 ]
 
 ROOT_URLCONF = 'rubixx.urls'
