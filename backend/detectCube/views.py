@@ -6,84 +6,58 @@ import numpy as np
 from django.views.decorators.csrf import csrf_exempt
 
 import base64
-# Create your views here.
+
 def get_color_name(h, s, v):
-    if s < 10 and v > 200:
-        return "White"
+    if s < 65 and v > 50:
+        return "white"
     if v < 50:
-        return "Black"
-    if h < 10 or h > 160:
-        return "Red"
-    if 10 <= h < 25:
-        return "Orange"
-    if 25 <= h < 35:
-        return "Yellow"
-    if 35 <= h < 85:
-        return "Green"
-    if 85 <= h < 125:
-        return "Blue"
-    if 125 <= h < 160:
-        return "Purple"
+        return "black"
+    if  1 < h < 27:
+        return "orange"
+    if 27 <= h < 45:
+        return "yellow"
+    if 45 <= h < 85:
+        return "green"
+    if 85 <= h < 160:
+        return "blue"
+    if h<=1 or h > 160:
+        return "red"
     return "Unknown"
+def get_dominant_rgb_color(roi):
+    """ Get dominant RGB from a certain region of interest.
 
-# @csrf_exempt
+    :param roi: the image array
+    :returns: tuple
+    """
+    average = roi.mean(axis=0).mean(axis=0)
+    pixels = np.float32(roi.reshape(-1, 3))
+
+    n_colors = 5
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 200, .1)
+    flags = cv2.KMEANS_RANDOM_CENTERS
+    _, labels, palette = cv2.kmeans(pixels, n_colors, None, criteria, 10, flags)
+    _, counts = np.unique(labels, return_counts=True)
+    dominant = palette[np.argmax(counts)]
+    hsv_frame = cv2.cvtColor(np.uint8([[dominant]]), cv2.COLOR_BGR2HSV)[0][0]
+    [h,s,v]=hsv_frame
+    color=get_color_name(h,s,v)
+    return color
+
+@csrf_exempt
 def scan_view(request):
-    # if request.method=="POST":
-        print("somethingsomethingidkkk check if something worksa")
+    if request.method=="GET":
+
         data=json.loads(request.body)
+        face=data.get('face')
+        colors=[]
+        for image_data in face:
+            img_decoded=base64.b64decode(image_data)
+            img_array=np.frombuffer(img_decoded,np.uint8)
+            image=cv2.imdecode(img_array,cv2.IMREAD_COLOR)
 
-        # data = request.json
-        image_data = data.get('image')
-    
-    # Decode the base64 image
-        img_data = base64.b64decode(image_data)
-        img_array = np.frombuffer(img_data, np.uint8)
-        frame = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
-
-        hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-
-        color_ranges = {
-            "red": [(0, 100, 100), (10, 255, 255), (160, 100, 100), (180, 255, 255)],
-            "green": [(40, 100, 100), (80, 255, 255)],
-            "blue": [(100, 100, 100), (140, 255, 255)],
-            "yellow": [(20, 100, 100), (30, 255, 255)],
-            "white": [(0, 0, 200), (180, 25, 255)],
-            "orange": [(10, 100, 100), (25, 255, 255)]
-        }
-    
-
-
-        results = []
-
-        for color, ranges in color_ranges.items():
-            if len(ranges) == 2:
-                lower, upper = ranges
-                mask = cv2.inRange(hsv_frame, np.array(lower), np.array(upper))
-            else:
-                mask1 = cv2.inRange(hsv_frame, np.array(ranges[0]), np.array(ranges[1]))
-                mask2 = cv2.inRange(hsv_frame, np.array(ranges[2]), np.array(ranges[3]))
-                mask = mask1 | mask2
-
-            contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-            for contour in contours:
-                area = cv2.contourArea(contour)
-                if area > 100:
-                    perimeter = cv2.arcLength(contour, True)
-                    approx = cv2.approxPolyDP(contour, 0.02 * perimeter, True)
-                    if len(approx) == 4:
-                        x, y, w, h = cv2.boundingRect(approx)
-                        aspect_ratio = w / float(h)
-                        if 0.9 <= aspect_ratio <= 1.1:
-                            roi = hsv_frame[y:y+h, x:x+w]
-                            avg_h = np.mean(roi[:, :, 0])
-                            avg_s = np.mean(roi[:, :, 1])
-                            avg_v = np.mean(roi[:, :, 2])
-                            color_name = get_color_name(avg_h, avg_s, avg_v)
-
-                            results.append({
-                                "color": color_name,
-                                "position": (x, y, w, h)
-                            })
-        print(results)
-        return JsonResponse(results)
+            blurredFrame = cv2.blur(image, (3, 3))
+            # cv2.imshow("something", blurredFrame)
+            color = get_dominant_rgb_color(blurredFrame)
+            print(color)
+            colors.append(color)
+        return JsonResponse(colors)

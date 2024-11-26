@@ -64,7 +64,7 @@ const CameraPopup = ({ onClose }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ image: imageDataUrl }),  
+        body: JSON.stringify({ face: croppedImages }),  
       });
 
       const data = await response.json();
