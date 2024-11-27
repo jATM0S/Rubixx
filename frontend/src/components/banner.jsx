@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import home from "./../assets/home.jpg";
-import CameraPopup from "./CameraPopUp";
+// import CameraPopup from "./CameraPopUp";
+import { useNavigate } from "react-router-dom";
+
 
 const Banner = () => {
-  const [popupOpen, setPopupOpen] = useState(false);
+  // const [popupOpen, setPopupOpen] = useState(false);
 
+const navigate=useNavigate();
+  const navigateToSolve=()=>{
+    navigate("/solve");
+  }
   return (
     <div className="w-full h-screen bg-cover bg-center bg-black">
       <div className="w-full h-full  md:inline-flex items-center">
@@ -21,10 +27,10 @@ const Banner = () => {
             Want to solve your mixed-up cube? Let’s get started!
           </p>
           <button
-            onClick={() => setPopupOpen(true)}
+            onClick={navigateToSolve}
             className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300"
           >
-            Scan the Cube
+            Solve the Cube
           </button>
         </div>
         <img
@@ -34,7 +40,7 @@ const Banner = () => {
         />
       </div>
 
-      {popupOpen && <CameraPopup onClose={() => setPopupOpen(false)} />}
+      {/* {popupOpen && <CameraPopup onClose={() => setPopupOpen(false)} />} */}
     </div>
   );
 };
