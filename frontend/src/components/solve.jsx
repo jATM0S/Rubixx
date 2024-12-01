@@ -94,15 +94,16 @@ const Solve = ({ onClose }) => {
   };
 
   return (
-    <div className="bg-black p-6 flex justify-evenly ">
-      {/* 3d cube */}
-      <div class="cube m-20 w-56 h-56">
-        <div class="face front ">
-          <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black ">
+    <div className="bg-black">
+      <div className="p-6 flex justify-evenly ">
+        {/* 3d cube */}
+        <div className="cube m-20 w-56 h-56">
+          <div className="face front grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black ">
             {Array(9)
               .fill(null)
               .map((_, index) => (
                 <div
+                  key={`front-${index}`}
                   className={`w-full h-full border border-black ${cubeColors.front[index]}`}
                   onClick={() =>
                     setCubeColors((prevColors) => {
@@ -116,13 +117,12 @@ const Solve = ({ onClose }) => {
                 </div>
               ))}
           </div>
-        </div>
-        <div class="face back ">
-          <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
+          <div className="face back grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
             {Array(9)
               .fill(null)
               .map((_, index) => (
                 <div
+                  key={`back-${index}`}
                   className={`w-full h-full border border-black ${cubeColors.back[index]}`}
                   onClick={() =>
                     setCubeColors((prevColors) => {
@@ -136,13 +136,12 @@ const Solve = ({ onClose }) => {
                 </div>
               ))}
           </div>
-        </div>
-        <div class="face left ">
-          <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
+          <div className="face left grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
             {Array(9)
               .fill(null)
               .map((_, index) => (
                 <div
+                  key={`left-${index}`}
                   className={`w-full h-full border border-black ${cubeColors.left[index]}`}
                   onClick={() =>
                     setCubeColors((prevColors) => {
@@ -156,13 +155,12 @@ const Solve = ({ onClose }) => {
                 </div>
               ))}
           </div>
-        </div>
-        <div class="face right ">
-          <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
+          <div className="face right grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
             {Array(9)
               .fill(null)
               .map((_, index) => (
                 <div
+                  key={`right-${index}`}
                   className={`w-full h-full border border-black ${cubeColors.right[index]}`}
                   onClick={() =>
                     setCubeColors((prevColors) => {
@@ -176,13 +174,12 @@ const Solve = ({ onClose }) => {
                 </div>
               ))}
           </div>
-        </div>
-        <div class="face top ">
-          <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
+          <div className="face top grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
             {Array(9)
               .fill(null)
               .map((_, index) => (
                 <div
+                  key={`top-${index}`}
                   className={`w-full h-full border border-black ${cubeColors.top[index]}`}
                   onClick={() =>
                     setCubeColors((prevColors) => {
@@ -196,13 +193,12 @@ const Solve = ({ onClose }) => {
                 </div>
               ))}
           </div>
-        </div>
-        <div class="face bottom ">
-          <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
+          <div className="face bottom grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
             {Array(9)
               .fill(null)
               .map((_, index) => (
                 <div
+                  key={`bottom-${index}`}
                   className={`w-full h-full border border-black ${cubeColors.bottom[index]}`}
                   onClick={() =>
                     setCubeColors((prevColors) => {
@@ -217,74 +213,100 @@ const Solve = ({ onClose }) => {
               ))}
           </div>
         </div>
-      </div>
 
-      {/* menu */}
-      <div className=" flex flex-col justify-center">
-        {/* fillcube section */}
-        <div className="my-3">
-          <p className=" text-white font-bold text-lg select-none py-2 px-3">Fill Cube:</p>
-
-          {/* colors */}
-          <div
-            className={`${currentColor} border-2 border-black p-3 rounded-3xl flex align-middle justify-center`}
+        {/* menu */}
+        <div className=" flex flex-col justify-center">
+          <button
+            // onClick={}
+            className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300"
           >
+            Scan the Cube
+          </button>
+
+          {/* fillcube section */}
+          <div className="my-3">
+            <p className=" text-white font-bold text-lg select-none py-2 px-3">
+              Fill Cube:
+            </p>
+
+            {/* colors */}
             <div
-              className="bg-blue-600 border-2 border-black h-14 w-14 rounded-2xl mx-2"
-              onClick={() => {
-                setCurrentColor("bg-blue-600");
-              }}
-            ></div>
-            <div
-              className="bg-red-500 border-2 border-black h-14 w-14 rounded-2xl mx-2"
-              onClick={() => {
-                setCurrentColor("bg-red-500");
-              }}
-            ></div>
-            <div
-              className="bg-orange-500 border-2 border-black h-14 w-14 rounded-2xl mx-2"
-              onClick={() => {
-                setCurrentColor("bg-orange-600");
-              }}
-            ></div>
-            <div
-              className="bg-yellow-400 border-2 border-black h-14 w-14 rounded-2xl mx-2"
-              onClick={() => {
-                setCurrentColor("bg-yellow-400");
-              }}
-            ></div>
-            <div
-              className="bg-white border-2 border-black h-14 w-14 rounded-2xl mx-2"
-              onClick={() => {
-                setCurrentColor("bg-white");
-              }}
-            ></div>
-            <div
-              className="py-4 bg-gray-500 text-white select-none h-14 w-14 rounded-2xl mx-2 text-center"
-              onClick={() => {
-                setCurrentColor("bg-white");
-                setCubeColors((prevColors) => {
-                  const updatedColors = { ...prevColors };
-                  const faces=["front","back","left","right","top","bottom"]
-                  faces.forEach((face)=>{updatedColors[face]= [...initialFaceColors];})
-                  return updatedColors;
-                })
-              }}
+              className={`${currentColor} border-2 border-black p-3 rounded-3xl flex align-middle justify-center`}
             >
-              Clear
+              <div
+                className="bg-blue-600 border-2 border-black h-14 w-14 rounded-2xl mx-2"
+                onClick={() => {
+                  setCurrentColor("bg-blue-600");
+                }}
+              ></div>
+              <div
+                className="bg-green-600 border-2 border-black h-14 w-14 rounded-2xl mx-2"
+                onClick={() => {
+                  setCurrentColor("bg-green-600");
+                }}
+              ></div>
+              <div
+                className="bg-red-500 border-2 border-black h-14 w-14 rounded-2xl mx-2"
+                onClick={() => {
+                  setCurrentColor("bg-red-500");
+                }}
+              ></div>
+              <div
+                className="bg-orange-500 border-2 border-black h-14 w-14 rounded-2xl mx-2"
+                onClick={() => {
+                  setCurrentColor("bg-orange-600");
+                }}
+              ></div>
+              <div
+                className="bg-yellow-400 border-2 border-black h-14 w-14 rounded-2xl mx-2"
+                onClick={() => {
+                  setCurrentColor("bg-yellow-400");
+                }}
+              ></div>
+              <div
+                className="bg-white border-2 border-black h-14 w-14 rounded-2xl mx-2"
+                onClick={() => {
+                  setCurrentColor("bg-white");
+                }}
+              ></div>
+              <div
+                className="py-4 bg-gray-500 text-white select-none h-14 w-14 rounded-2xl mx-2 text-center"
+                onClick={() => {
+                  setCurrentColor("bg-white");
+                  setCubeColors((prevColors) => {
+                    const updatedColors = { ...prevColors };
+                    const faces = [
+                      "front",
+                      "back",
+                      "left",
+                      "right",
+                      "top",
+                      "bottom",
+                    ];
+                    faces.forEach((face) => {
+                      updatedColors[face] = [...initialFaceColors];
+                    });
+                    return updatedColors;
+                  });
+                }}
+              >
+                Clear
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* sends the cube notation to solve */}
-        <button
-          onClick={solve_cube}
-          className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300"
-        >
-          Solve the Cube
-        </button>
+          {/* sends the cube notation to solve */}
+          <button
+            onClick={solve_cube}
+            className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300"
+          >
+            Solve the Cube
+          </button>
+        </div>
       </div>
-      <p className="text-white">{response.sequence.join(" ")}</p>
+      <div className="">
+        <p className="text-white">{response.sequence.join(" ")}</p>
+      </div>
     </div>
   );
 };
