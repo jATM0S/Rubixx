@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import "./cube.css";
 
 const Solve = ({ onClose }) => {
+  const [isFormVisible, setFormVisible] = useState(false);
   const [response, setResponse] = useState({
     sequence: [],
     is_solved: true,
@@ -144,21 +145,20 @@ const Solve = ({ onClose }) => {
       <div className="bg-black p-8 rounded shadow-lg text-center">
         <div className="w-full my-20 bg-black flex justify-center">
           {/* 3d cube */}
-          <div class=" w-48 h-48 ">
             <div class="cube">
-              <div class="face front bg-red-500">
-                <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
+              <div class="face front">
+                <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black ">
                   {Array(9)
                     .fill(null)
                     .map((_, index) => (
                       <div
                         key={index}
                         className="w-full h-full border border-black bg-white"
-                      ></div>
+                      >{index+1}</div>
                     ))}
                 </div>
               </div>
-              <div class="face back bg-orange-500">
+              <div class="face back ">
                 <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
                   {Array(9)
                     .fill(null)
@@ -166,11 +166,11 @@ const Solve = ({ onClose }) => {
                       <div
                         key={index}
                         className="w-full h-full border border-black bg-white"
-                      ></div>
+                      >{index+1}</div>
                     ))}
                 </div>
               </div>
-              <div class="face left bg-blue-500">
+              <div class="face left ">
                 <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
                   {Array(9)
                     .fill(null)
@@ -178,11 +178,11 @@ const Solve = ({ onClose }) => {
                       <div
                         key={index}
                         className="w-full h-full border border-black bg-white"
-                      ></div>
+                      >{index+1}</div>
                     ))}
                 </div>
               </div>
-              <div class="face right bg-green-500">
+              <div class="face right ">
                 <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
                   {Array(9)
                     .fill(null)
@@ -190,11 +190,11 @@ const Solve = ({ onClose }) => {
                       <div
                         key={index}
                         className="w-full h-full border border-black bg-white"
-                      ></div>
+                      >{index+1}</div>
                     ))}
                 </div>
               </div>
-              <div class="face top bg-yellow-500">
+              <div class="face top ">
                 <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
                   {Array(9)
                     .fill(null)
@@ -202,11 +202,11 @@ const Solve = ({ onClose }) => {
                       <div
                         key={index}
                         className="w-full h-full border border-black bg-white"
-                      ></div>
+                      >{index+1}</div>
                     ))}
                 </div>
               </div>
-              <div class="face bottom bg-white">
+              <div class="face bottom ">
                 <div className="grid grid-cols-3 gap-0 w-48 h-48 border-2 border-black">
                   {Array(9)
                     .fill(null)
@@ -214,54 +214,41 @@ const Solve = ({ onClose }) => {
                       <div
                         key={index}
                         className="w-full h-full border border-black bg-white"
-                      ></div>
+                      >{index+1}</div>
                     ))}
                 </div>
               </div>
             </div>
-          </div>
         </div>
 
         <button
-          // onClick={}
+          onClick={() => setFormVisible(!isFormVisible)}
           className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300"
         >
           Input cube string
         </button>
 
         {/* input cube string */}
-        <form action="POST" className="hidden">
+        <form action="POST" className={`my-3 ${isFormVisible ? "" : "hidden"}`}>
           <label
             htmlFor="cubeString  "
             className="text-slate-200 text-xl font-bold "
           >
             Cube string:{" "}
           </label>
-          <input
-            type="text"
-            className="h-14 w-96 text-lg tracking-widest text-slate-200  bg-blue-500 p-3 rounded-lg"
-          />
-          <input
-            type="text"
-            className="h-14 w-96 text-lg tracking-widest text-slate-200  bg-blue-500 p-3 rounded-lg"
-          />
-          <input
-            type="text"
-            className="h-14 w-96 text-lg tracking-widest text-slate-200  bg-blue-500 p-3 rounded-lg"
-          />
-          <input
-            type="text"
-            className="h-14 w-96 text-lg tracking-widest text-slate-200  bg-blue-500 p-3 rounded-lg"
-          />
-          <input
-            type="text"
-            className="h-14 w-96 text-lg tracking-widest text-slate-200  bg-blue-500 p-3 rounded-lg"
-          />
-          <input
-            type="text"
-            className="h-14 w-96 text-lg tracking-widest text-slate-200  bg-blue-500 p-3 rounded-lg"
-          />
+          <div className=" flex flex-row justify-evenly flex-wrap">
+            <input
+              type="text"
+              onInput={(e) => {
+                e.target.value = e.target.value.replace(/[^rgboyw]/gi, ""); // Removes invalid characters, including spaces
+              }}
+              maxLength="9"
+              className="h-14 w-44 text-lg tracking-widest text-slate-200  bg-blue-500 p-3 rounded-lg"
+            />
+          </div>
         </form>
+
+        
 
         {/* sends the cube notation to solve */}
         <button
@@ -271,7 +258,6 @@ const Solve = ({ onClose }) => {
           Solve the Cube
         </button>
         <p className="text-white">{response.sequence.join(" ")}</p>
-        {/* <p>{response.sequence}</p> */}
       </div>
     </div>
   );
