@@ -21,7 +21,7 @@ const App = () => {
 
   return (
     <Router>
-      <div>
+      <div className="bg-black">
         <Nav
           onFAQClick={scrollToFAQ}
           onQuizClick={scrollToQuiz}
