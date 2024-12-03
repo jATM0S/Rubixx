@@ -1,21 +1,38 @@
 import React, { useState } from "react";
 import "./cube.css";
+import eye from "./../assets/eye.png";
 
 const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
-  const [typeOfCube, setType] = useState("");
+  const [typeOfCube, setType] = useState("3d");
+  // const [hidden, setHidden] = useState(true);
   return (
-    <div className="bg-white flex flex-col justify-center">
-      <div className="flex justify-evenly ">
-        <button className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300">
-          3d
-        </button>
-        <button className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300">
-          2d
-        </button>
+    <div className={` w-2/4 h-[510px]`}>
+      <div className="w-full flex justify-center ">
+        <div className="flex justify-evenly w-56 ">
+          <button
+            className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300"
+            onClick={() => setType("3d")}
+          >
+            3d
+          </button>
+          <button
+            className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300 active:bg-blue-700"
+            onClick={() => setType("2d")}
+          >
+            2d
+          </button>
+        </div>
       </div>
-      <div className=" bg-green-400 w-80 h-80 flex justify-center items-center pt-10">
-        <div className="cube w-56 h-56">
-          <div className="face front grid grid-cols-3 gap-0 border-2">
+
+      <div
+        className={`${
+          typeOfCube == "3d" ? "h-96" : "h-[480px]"
+        } w-full flex justify-center `}
+      >
+        <div className={`cube${typeOfCube}`}>
+          <div
+            className={`face${typeOfCube} front${typeOfCube} grid grid-cols-3 gap-0 border-2 `}
+          >
             {Array(9)
               .fill(null)
               .map((_, index) => (
@@ -34,7 +51,9 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                 </div>
               ))}
           </div>
-          <div className="face back grid grid-cols-3 gap-0 border-2 ">
+          <div
+            className={`face${typeOfCube} back${typeOfCube} grid grid-cols-3 gap-0 border-2`}
+          >
             {Array(9)
               .fill(null)
               .map((_, index) => (
@@ -53,7 +72,9 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                 </div>
               ))}
           </div>
-          <div className="face left grid grid-cols-3 gap-0 border-2 ">
+          <div
+            className={`face${typeOfCube} left${typeOfCube} grid grid-cols-3 gap-0 border-2`}
+          >
             {Array(9)
               .fill(null)
               .map((_, index) => (
@@ -72,7 +93,9 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                 </div>
               ))}
           </div>
-          <div className="face right grid grid-cols-3 gap-0 border-2 ">
+          <div
+            className={`face${typeOfCube} right${typeOfCube} grid grid-cols-3 gap-0 border-2`}
+          >
             {Array(9)
               .fill(null)
               .map((_, index) => (
@@ -91,7 +114,9 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                 </div>
               ))}
           </div>
-          <div className="face top grid grid-cols-3 gap-0 border-2 ">
+          <div
+            className={`face${typeOfCube} top${typeOfCube} grid grid-cols-3 gap-0 border-2`}
+          >
             {Array(9)
               .fill(null)
               .map((_, index) => (
@@ -110,7 +135,9 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                 </div>
               ))}
           </div>
-          <div className="face bottom grid grid-cols-3 gap-0 border-2 ">
+          <div
+            className={`face${typeOfCube} bottom${typeOfCube} grid grid-cols-3 gap-0 border-2`}
+          >
             {Array(9)
               .fill(null)
               .map((_, index) => (

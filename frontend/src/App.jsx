@@ -4,7 +4,7 @@ import Faq from "./components/faq";
 import Banner from "./components/banner";
 import Quiz from "./components/quiz";
 import Nav from "./components/nav";
-import Solve from "./components/solve"
+import Solve from "./components/solve";
 
 const App = () => {
   const faqRef = useRef(null);
@@ -18,21 +18,15 @@ const App = () => {
     quizRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-
   return (
     <Router>
       <div className="bg-black">
-        <Nav
-          onFAQClick={scrollToFAQ}
-          onQuizClick={scrollToQuiz}
-        />
+        <Nav onFAQClick={scrollToFAQ} onQuizClick={scrollToQuiz} />
 
-        <div className="pt-16">
-          <Routes>
-            <Route path="/" element={<Banner />} />
-            <Route path="/solve" element={<Solve />} />
-          </Routes>
-        </div>
+        <Routes>
+          <Route path="/" element={<Banner />} />
+          <Route path="/solve" element={<Solve />} />
+        </Routes>
 
         <div ref={faqRef} className="section">
           <Faq />

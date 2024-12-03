@@ -97,8 +97,8 @@ const Solve = ({ onClose }) => {
   };
 
   return (
-    <div>
-      <div className="p-6 flex justify-evenly flex-wrap">
+    <div className="pt-20">
+      <div className="flex justify-evenly flex-wrap">
 
         {/*cube */}
         <Cube
@@ -108,7 +108,7 @@ const Solve = ({ onClose }) => {
         />
 
         {/* menu */}
-        <div className=" flex flex-col justify-center">
+        <div className="border border-black flex flex-col justify-center ">
           <button
             // onClick={}
             className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300"
