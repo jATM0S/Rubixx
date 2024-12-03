@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import "./cube.css";
-import eye from "./../assets/eye.png";
 
 const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
   const [typeOfCube, setType] = useState("3d");
-  // const [hidden, setHidden] = useState(true);
   return (
     <div className={` w-2/4 h-[510px]`}>
       <div className="w-full flex justify-center ">
