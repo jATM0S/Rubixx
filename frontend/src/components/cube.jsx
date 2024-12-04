@@ -3,19 +3,30 @@ import "./cube.css";
 
 const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
   const [typeOfCube, setType] = useState("3d");
+  const [rotation, setRotation] = useState({ y: -30, z: 0 });
+  const [hidden, setHidden] = useState(false);
+
   return (
-    <div className={` w-2/4 h-[510px]`}>
+    <div className={`w-2/4 h-[500px] flex flex-col justify-center`}>
       <div className="w-full flex justify-center ">
         <div className="flex justify-evenly w-56 ">
           <button
-            className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300"
-            onClick={() => setType("3d")}
+            className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300 "
+            onClick={() => {
+              setType("3d");
+              setRotation((prev) => ({ z: 0, y: -30 }));
+              setHidden(false);
+            }}
           >
             3d
           </button>
           <button
             className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300 active:bg-blue-700"
-            onClick={() => setType("2d")}
+            onClick={() => {
+              setType("2d");
+              setRotation((prev) => ({ z: 0, y: 0 }));
+              setHidden(true);
+            }}
           >
             2d
           </button>
@@ -24,12 +35,17 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
 
       <div
         className={`${
-          typeOfCube == "3d" ? "h-96" : "h-[480px]"
-        } w-full flex justify-center `}
+          typeOfCube == "3d" ? "h-[381px]" : "h-[430px]"
+        } w-full flex justify-center items-center`}
       >
-        <div className={`cube${typeOfCube}`}>
+        <div
+          className={`cube${typeOfCube} w-2 h-2`}
+          style={{
+            transform: `rotateX(-30deg) rotateY(${rotation.y}deg) rotateZ(${rotation.z}deg)`,
+          }}
+        >
           <div
-            className={`face${typeOfCube} front${typeOfCube} grid grid-cols-3 gap-0 border-2 `}
+            className={`face${typeOfCube} front${typeOfCube} grid grid-cols-3 gap-0 border-2 select-none`}
           >
             {Array(9)
               .fill(null)
@@ -45,12 +61,12 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                     })
                   }
                 >
-                  {index + 1}
+                  {index + 1}F
                 </div>
               ))}
           </div>
           <div
-            className={`face${typeOfCube} back${typeOfCube} grid grid-cols-3 gap-0 border-2`}
+            className={`face${typeOfCube} back${typeOfCube} grid grid-cols-3 gap-0 border-2 select-none `}
           >
             {Array(9)
               .fill(null)
@@ -66,12 +82,12 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                     })
                   }
                 >
-                  {index + 1}
+                  {index + 1}B
                 </div>
               ))}
           </div>
           <div
-            className={`face${typeOfCube} left${typeOfCube} grid grid-cols-3 gap-0 border-2`}
+            className={`face${typeOfCube} left${typeOfCube} grid grid-cols-3 gap-0 border-2 select-none`}
           >
             {Array(9)
               .fill(null)
@@ -87,12 +103,12 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                     })
                   }
                 >
-                  {index + 1}
+                  {index + 1}L
                 </div>
               ))}
           </div>
           <div
-            className={`face${typeOfCube} right${typeOfCube} grid grid-cols-3 gap-0 border-2`}
+            className={`face${typeOfCube} right${typeOfCube} grid grid-cols-3 gap-0 border-2 select-none`}
           >
             {Array(9)
               .fill(null)
@@ -108,12 +124,12 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                     })
                   }
                 >
-                  {index + 1}
+                  {index + 1}R
                 </div>
               ))}
           </div>
           <div
-            className={`face${typeOfCube} top${typeOfCube} grid grid-cols-3 gap-0 border-2`}
+            className={`face${typeOfCube} top${typeOfCube} grid grid-cols-3 gap-0 border-2 select-none`}
           >
             {Array(9)
               .fill(null)
@@ -129,12 +145,12 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                     })
                   }
                 >
-                  {index + 1}
+                  {index + 1}T
                 </div>
               ))}
           </div>
           <div
-            className={`face${typeOfCube} bottom${typeOfCube} grid grid-cols-3 gap-0 border-2`}
+            className={`face${typeOfCube} bottom${typeOfCube} grid grid-cols-3 gap-0 border-2 select-none`}
           >
             {Array(9)
               .fill(null)
@@ -150,11 +166,33 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                     })
                   }
                 >
-                  {index + 1}
+                  {index + 1}B
                 </div>
               ))}
           </div>
         </div>
+      </div>
+      
+      <div
+        className={`${
+          hidden ? "hidden" : ""
+        } flex justify-center align-middle `}
+      >
+        <div
+          className="bg-blue-600 w-16 h-12"
+          onClick={() => setRotation((prev) => ({ z: prev.z, y: prev.y - 90 }))}
+        ></div>
+        <div
+          className="bg-orange-600 w-16 h-12"
+          onClick={() =>
+            setRotation((prev) => ({ z: prev.z - 180, y: prev.y }))
+          }
+        ></div>
+
+        <div
+          className="bg-blue-600 w-16 h-12"
+          onClick={() => setRotation((prev) => ({ z: prev.z, y: prev.y + 90 }))}
+        ></div>
       </div>
     </div>
   );
