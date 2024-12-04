@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./cube.css";
 import Cube from "./cube"
+
+
 const Solve = ({ onClose }) => {
   const [currentColor, setCurrentColor] = useState("bg-white");
   const initialFaceColors = Array(9).fill("bg-white"); // Initial colors for each face
@@ -97,8 +99,8 @@ const Solve = ({ onClose }) => {
   };
 
   return (
-    <div className="pt-20">
-      <div className="flex justify-evenly flex-wrap">
+    <div className="py-16">
+      <div className="flex justify-evenly flex-wrap ">
 
         {/*cube */}
         <Cube
@@ -106,25 +108,24 @@ const Solve = ({ onClose }) => {
           currentColor={currentColor}
           setCubeColors={setCubeColors}
         />
-
         {/* menu */}
-        <div className="border border-black flex flex-col justify-center ">
+        <div className=" flex flex-col justify-center">
           <button
             // onClick={}
-            className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300"
+            className="bg-blue-600 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
           >
             Scan the Cube
           </button>
 
           {/* fillcube section */}
-          <div className="my-3">
-            <p className=" text-white font-bold text-lg select-none py-2 px-3">
+          <div className="my-2">
+            <p className=" text-white font-bold text-lg select-none my-2 px-3 ">
               Fill Cube:
             </p>
 
             {/* colors */}
             <div
-              className={`${currentColor} border-2 border-black p-3 rounded-3xl flex align-middle justify-center`}
+              className={`${currentColor} border-2 border-black p-3 mb-2 rounded-3xl flex align-middle justify-center`}
             >
               <div
                 className="bg-blue-600 border-2 border-black h-14 w-14 rounded-2xl mx-2"
@@ -191,7 +192,7 @@ const Solve = ({ onClose }) => {
           {/* sends the cube notation to solve */}
           <button
             onClick={solve_cube}
-            className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300"
+            className="bg-blue-600 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
           >
             Solve the Cube
           </button>
