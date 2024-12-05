@@ -41,7 +41,6 @@
 .cube2d {
   translate:-5rem -3rem;
   gap: 0;
-  transition: transform 1s ease-in-out; 
 }
 
 .face2d {

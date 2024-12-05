@@ -14,7 +14,7 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
             className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300 "
             onClick={() => {
               setType("3d");
-              setRotation((prev) => ({ z: 0, y: -30 }));
+              setRotation((prev) => ({ y: -30, z: 0 }));
               setHidden(false);
             }}
           >
@@ -24,7 +24,7 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
             className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition duration-300 active:bg-blue-700"
             onClick={() => {
               setType("2d");
-              setRotation((prev) => ({ z: 0, y: 0 }));
+              setRotation((prev) => ({ y: 0, z: 0 }));
               setHidden(true);
             }}
           >
@@ -172,7 +172,7 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
           </div>
         </div>
       </div>
-      
+
       <div
         className={`${
           hidden ? "hidden" : ""
@@ -180,18 +180,18 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
       >
         <div
           className="bg-blue-600 w-16 h-12"
-          onClick={() => setRotation((prev) => ({ z: prev.z, y: prev.y - 90 }))}
+          onClick={() => setRotation((prev) => ({ y: prev.y - 90, z: prev.z }))}
         ></div>
         <div
           className="bg-orange-600 w-16 h-12"
           onClick={() =>
-            setRotation((prev) => ({ z: prev.z - 180, y: prev.y }))
+            setRotation((prev) => ({ y: prev.y, z: prev.z - 180 }))
           }
         ></div>
 
         <div
           className="bg-blue-600 w-16 h-12"
-          onClick={() => setRotation((prev) => ({ z: prev.z, y: prev.y + 90 }))}
+          onClick={() => setRotation((prev) => ({ y: prev.y + 90, z: prev.z }))}
         ></div>
       </div>
     </div>
