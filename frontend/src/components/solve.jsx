@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./cube.css";
-import Cube from "./cube"
-
+import Cube from "./cube";
 
 const Solve = ({ onClose }) => {
   const [currentColor, setCurrentColor] = useState("bg-white");
@@ -19,89 +18,55 @@ const Solve = ({ onClose }) => {
     is_solved: true,
     error: "",
   });
-  const getRubiks_cube=(cubeColors)=>{
 
-}
+  const getRubiks_cube = (cubeColors) => {
+    const faces = ["F", "B", "L", "R", "U", "D"];
+    const getColorNotation = {
+      "bg-blue-600": "B",
+      "bg-white": "W",
+      "bg-green-500": "G",
+      "bg-red-500": "R",
+      "bg-orange-500": "O",
+      "bg-yellow-400": "Y",
+    };
+    console.log(cubeColors);
+    const rubiks_cube_notation = {};
+
+    Object.keys(cubeColors).forEach((face,faceNo) => {
+      cubeColors[face].forEach((color, index) => {
+        rubiks_cube_notation[`${faces[faceNo]}${index + 1}`] = getColorNotation[color];
+      });
+    });
+    return rubiks_cube_notation;
+  };
+
   // fetch the solution and put in stateful variable
   const solve_cube = async () => {
     try {
-      const rubiks_cube=getRubiks_cube()
+      const cube = getRubiks_cube(cubeColors);
+      console.log(cube);
       const response = await fetch("http://127.0.0.1:8000/solve/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          rubiks_cube: {
-            F1: "O",
-            F2: "R",
-            F3: "O",
-            F4: "Y",
-            F5: "R",
-            F6: "O",
-            F7: "B",
-            F8: "Y",
-            F9: "Y",
-            R1: "G",
-            R2: "O",
-            R3: "B",
-            R4: "B",
-            R5: "G",
-            R6: "B",
-            R7: "G",
-            R8: "G",
-            R9: "W",
-            B1: "O",
-            B2: "Y",
-            B3: "W",
-            B4: "W",
-            B5: "O",
-            B6: "O",
-            B7: "R",
-            B8: "O",
-            B9: "O",
-            L1: "R",
-            L2: "R",
-            L3: "G",
-            L4: "W",
-            L5: "B",
-            L6: "G",
-            L7: "Y",
-            L8: "R",
-            L9: "R",
-            U1: "B",
-            U2: "B",
-            U3: "W",
-            U4: "W",
-            U5: "Y",
-            U6: "G",
-            U7: "Y",
-            U8: "B",
-            U9: "W",
-            D1: "Y",
-            D2: "R",
-            D3: "R",
-            D4: "G",
-            D5: "W",
-            D6: "W",
-            D7: "B",
-            D8: "Y",
-            D9: "G",
-          },
+          rubiks_cube: cube
         }),
       });
       const data = await response.json();
       console.log(data);
       setResponse(data);
     } catch (error) {
-      setResponse((prev)=>{[], false, "Fetch error"});
+      setResponse((prev) => {
+        [], false, "Fetch error";
+      });
     }
   };
 
   return (
     <div className="py-16">
       <div className="flex justify-evenly flex-wrap ">
-
         {/*cube */}
         <Cube
           cubeColors={cubeColors}
@@ -134,9 +99,9 @@ const Solve = ({ onClose }) => {
                 }}
               ></div>
               <div
-                className="bg-green-600 border-2 border-black h-14 w-14 rounded-2xl mx-2"
+                className="bg-green-500 border-2 border-black h-14 w-14 rounded-2xl mx-2"
                 onClick={() => {
-                  setCurrentColor("bg-green-600");
+                  setCurrentColor("bg-green-500");
                 }}
               ></div>
               <div
@@ -148,7 +113,7 @@ const Solve = ({ onClose }) => {
               <div
                 className="bg-orange-500 border-2 border-black h-14 w-14 rounded-2xl mx-2"
                 onClick={() => {
-                  setCurrentColor("bg-orange-600");
+                  setCurrentColor("bg-orange-500");
                 }}
               ></div>
               <div
@@ -199,7 +164,11 @@ const Solve = ({ onClose }) => {
         </div>
       </div>
       <div className="">
-        <p className="text-white">{response.sequence.join(" ")}</p>
+        <p className="text-white">
+          {response.sequence?.length > 0
+            ? response.sequence.join(" ")
+            : response.error}
+        </p>
       </div>
     </div>
   );
