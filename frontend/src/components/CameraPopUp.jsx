@@ -11,7 +11,12 @@ const CameraPopup = ({ onClose }) => {
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         mediaStreamRef.current = stream;
-        videoRef.current.play();
+        videoRef.current.onloadedmetadata = () => {
+          videoRef.current.play().catch((error) => {
+            console.error("Error playing video: ", error);
+          });
+        };
+        // videoRef.current.play();
         console.log("Camera started successfully.");
       }
     } catch (error) {
@@ -31,40 +36,52 @@ const CameraPopup = ({ onClose }) => {
   };
 
   const squares = [
-    { x: 150, y: 100, size: 60 }, 
-    { x: 250, y: 100, size: 60 }, 
-    { x: 350, y: 100, size: 60 }, 
-    { x: 150, y: 200, size: 60 }, 
-    { x: 250, y: 200, size: 60 }, 
-    { x: 350, y: 200, size: 60 }, 
-    { x: 150, y: 300, size: 60 }, 
-    { x: 250, y: 300, size: 60 }, 
-    { x: 350, y: 300, size: 60 }, 
+    { x: 150, y: 100, size: 30 },
+    { x: 250, y: 100, size: 30 },
+    { x: 350, y: 100, size: 30 },
+    { x: 150, y: 200, size: 30 },
+    { x: 250, y: 200, size: 30 },
+    { x: 350, y: 200, size: 30 },
+    { x: 150, y: 300, size: 30 },
+    { x: 250, y: 300, size: 30 },
+    { x: 350, y: 300, size: 30 },
   ];
   const analyzeFrame = async () => {
     if (videoRef.current) {
-      const canvas = document.createElement("canvas");
-      canvas.width = videoRef.current.videoWidth;
-      canvas.height = videoRef.current.videoHeight;
-      const context = canvas.getContext("2d");
-      context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+      const videoWidth = videoRef.current.videoWidth;
+      const videoHeight = videoRef.current.videoHeight;
 
-      const croppedImages = squares.map(({ x, y, size }) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = videoWidth;
+      canvas.height = videoHeight;
+      const context = canvas.getContext("2d", { willReadFrequently: true });
+
+      // Draw the video frame on the canvas
+      context.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
+
+      // Adjust squares to match video dimensions
+      const adjustedSquares = squares.map(({ x, y, size }) => ({
+        x: x * (videoWidth / videoRef.current.offsetWidth), // Scale to videoWidth
+        y: y * (videoHeight / videoRef.current.offsetHeight), // Scale to videoHeight
+        size: size * (videoWidth / videoRef.current.offsetWidth), // Scale size
+      }));
+
+      const croppedImages = adjustedSquares.map(({ x, y, size }) => {
         const imageData = context.getImageData(x, y, size, size); // Crop square
         const cropCanvas = document.createElement("canvas"); // Create a new canvas for each crop
         cropCanvas.width = size;
         cropCanvas.height = size;
         const cropContext = cropCanvas.getContext("2d");
         cropContext.putImageData(imageData, 0, 0); // Paste the cropped image onto the new canvas
-        return cropCanvas; // Return the cropped canvas
-      });  
+        return cropCanvas.toDataURL("image/png"); // Default is "image/png"
+      });
 
-      const response = await fetch("http://127.0.0.1:8000/scan", {
+      const response = await fetch("http://127.0.0.1:8000/scan/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ face: croppedImages }),  
+        body: JSON.stringify({ face: croppedImages }),
       });
 
       const data = await response.json();
@@ -84,18 +101,18 @@ const CameraPopup = ({ onClose }) => {
   }, []);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
       <div className="bg-white p-4 rounded shadow-lg">
         <h2 className="text-black text-2xl mb-4">Camera Feed:</h2>
         <div className="relative w-full h-[400px]">
           <video
             ref={videoRef}
-            className="w-full h-full object-cover transform scale-x-[-1] z-0"
+            className="w-full h-full object-cover transform scale-x-[-1]"
             autoPlay
             muted
           ></video>
 
-           {/* Overlay with squares, arranged based on coordinates */}
+          {/* Overlay with squares, arranged based on coordinates */}
           <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none z-10">
             {squares.map((square, index) => (
               <div
