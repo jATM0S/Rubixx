@@ -1,9 +1,15 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./cube.css";
 import Cube from "./cube";
+import CameraPopup from "./CameraPopUp";
 
 const Solve = ({ onClose }) => {
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupVisible, setVisibility] = useState(false);
+
+  //selected color to fill
   const [currentColor, setCurrentColor] = useState("bg-white");
+
   const initialFaceColors = Array(9).fill("bg-white"); // Initial colors for each face
   const [cubeColors, setCubeColors] = useState({
     front: [...initialFaceColors],
@@ -32,9 +38,10 @@ const Solve = ({ onClose }) => {
     console.log(cubeColors);
     const rubiks_cube_notation = {};
 
-    Object.keys(cubeColors).forEach((face,faceNo) => {
+    Object.keys(cubeColors).forEach((face, faceNo) => {
       cubeColors[face].forEach((color, index) => {
-        rubiks_cube_notation[`${faces[faceNo]}${index + 1}`] = getColorNotation[color];
+        rubiks_cube_notation[`${faces[faceNo]}${index + 1}`] =
+          getColorNotation[color];
       });
     });
     return rubiks_cube_notation;
@@ -51,7 +58,7 @@ const Solve = ({ onClose }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          rubiks_cube: cube
+          rubiks_cube: cube,
         }),
       });
       const data = await response.json();
@@ -65,8 +72,8 @@ const Solve = ({ onClose }) => {
   };
 
   return (
-    <div className="py-16">
-      <div className="flex justify-evenly flex-wrap ">
+    <div className="py-16 bg-blue-400">
+      <div className="flex justify-evenly flex-wrap bg-blue-600">
         {/*cube */}
         <Cube
           cubeColors={cubeColors}
@@ -74,13 +81,14 @@ const Solve = ({ onClose }) => {
           setCubeColors={setCubeColors}
         />
         {/* menu */}
-        <div className=" flex flex-col justify-center">
+        <div className=" flex flex-col justify-center bg-white">
           <button
-            // onClick={}
+            onClick={() => setPopupOpen(true)}
             className="bg-blue-600 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
           >
             Scan the Cube
           </button>
+          {popupOpen && <CameraPopup onClose={() => setPopupOpen(false)} />}
 
           {/* fillcube section */}
           <div className="my-2">

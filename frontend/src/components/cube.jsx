@@ -7,7 +7,7 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
   const [hidden, setHidden] = useState(false);
 
   return (
-    <div className={`w-2/4 h-[500px] flex flex-col justify-center`}>
+    <div className={`w-2/4 h-[500px] flex flex-col justify-center opacity-100 bg-green-300 transition-opacity duration-1000	`}>
       <div className="w-full flex justify-center ">
         <div className="flex justify-evenly w-56 ">
           <button

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import home from "./../assets/home.jpg";
-// import CameraPopup from "./CameraPopUp";
 import { useNavigate } from "react-router-dom";
 
 
 const Banner = () => {
-  // const [popupOpen, setPopupOpen] = useState(false);
 
 const navigate=useNavigate();
   const navigateToSolve=()=>{
@@ -40,7 +38,6 @@ const navigate=useNavigate();
         />
       </div>
 
-      {/* {popupOpen && <CameraPopup onClose={() => setPopupOpen(false)} />} */}
     </div>
   );
 };
