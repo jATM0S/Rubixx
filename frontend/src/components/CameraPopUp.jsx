@@ -4,6 +4,13 @@ const CameraPopup = ({ onClose }) => {
   const videoRef = useRef(null);
   const mediaStreamRef = useRef(null);
   const [results, setResults] = useState([]);
+  const [inputFace, setFace] = useState("front");
+  const topRef = useRef(null);
+  const leftRef = useRef(null);
+  const frontRef = useRef(null);
+  const rightRef = useRef(null);
+  const backRef = useRef(null);
+  const bottomRef = useRef(null);
 
   const startCamera = async () => {
     try {
@@ -91,20 +98,176 @@ const CameraPopup = ({ onClose }) => {
 
   useEffect(() => {
     startCamera();
-
-    const intervalId = setInterval(analyzeFrame, 1000); // Analyze every second
+    frontRef.current.focus();
+    // const intervalId = setInterval(analyzeFrame, 1000); // Analyze every second
 
     return () => {
-      clearInterval(intervalId);
+      // clearInterval(intervalId);
       stopCamera(); // Cleanup on component unmount
     };
   }, []);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
-      <div className="bg-white p-4 rounded shadow-lg">
-        <h2 className="text-black text-2xl mb-4">Camera Feed:</h2>
-        <div className="relative w-full h-[400px]">
+    <div className="absolute flex items-center justify-center mt-5">
+      <div className="bg-white p-3 rounded shadow-lg">
+        {/* face to input section */}
+        <div className="flex justify-center items-center">
+          <span className=" text-black text-2xl mx-4">Face:</span>
+          <div className="grid grid-cols-4 grid-rows-3 gap-1 h-16 w-24">
+            <div
+              className={`col-start-2 col-span-1 row-start-1 row-span-1 border-2 border-black ${
+                inputFace == "top" ? "bg-black animate-opacity-fade" : ""
+              }`}
+              onClick={() => {
+                setFace("top");
+              }}
+              tabIndex={0}
+              ref={topRef}
+              onKeyDown={(event) => {
+                if (event.key === "ArrowUp") {
+                  bottomRef.current.focus();
+                  setFace("bottom");
+                } else if (event.key === "ArrowDown") {
+                  frontRef.current.focus();
+                  setFace("front");
+                } else if (event.key === "ArrowLeft") {
+                  leftRef.current.focus();
+                  setFace("left");
+                } else if (event.key === "ArrowRight") {
+                  rightRef.current.focus();
+                  setFace("right");
+                }
+              }}
+            ></div>
+            <div
+              className={`col-start-1 col-span-1 row-start-2 row-span-1 border-2 border-black ${
+                inputFace == "left" ? "bg-black animate-opacity-fade" : ""
+              }`}
+              onClick={() => {
+                setFace("left");
+              }}
+              tabIndex={0}
+              ref={leftRef}
+              onKeyDown={(event) => {
+                if (event.key === "ArrowUp") {
+                  topRef.current.focus();
+                  setFace("top");
+                } else if (event.key === "ArrowDown") {
+                  bottomRef.current.focus();
+                  setFace("bottom");
+                } else if (event.key === "ArrowLeft") {
+                  backRef.current.focus();
+                  setFace("back");
+                } else if (event.key === "ArrowRight") {
+                  frontRef.current.focus();
+                  setFace("front");
+                }
+              }}
+            ></div>
+            <div
+              className={`col-start-2 col-span-1 row-start-2 row-span-1 border-2 border-black ${
+                inputFace == "front" ? "bg-black animate-opacity-fade" : ""
+              }`}
+              onClick={() => {
+                setFace("front");
+              }}
+              tabIndex={0}
+              ref={frontRef}
+              onKeyDown={(event) => {
+                if (event.key === "ArrowUp") {
+                  topRef.current.focus();
+                  setFace("top");
+                } else if (event.key === "ArrowDown") {
+                  bottomRef.current.focus();
+                  setFace("bottom");
+                } else if (event.key === "ArrowLeft") {
+                  leftRef.current.focus();
+                  setFace("left");
+                } else if (event.key === "ArrowRight") {
+                  rightRef.current.focus();
+                  setFace("right");
+                }
+              }}
+            ></div>
+            <div
+              className={`col-start-3 col-span-1 row-start-2 row-span-1 border-2 border-black ${
+                inputFace == "right" ? "bg-black animate-opacity-fade" : ""
+              }`}
+              onClick={() => {
+                setFace("right");
+              }}
+              tabIndex={0}
+              ref={rightRef}
+              onKeyDown={(event) => {
+                if (event.key === "ArrowUp") {
+                  topRef.current.focus();
+                  setFace("top");
+                } else if (event.key === "ArrowDown") {
+                  bottomRef.current.focus();
+                  setFace("bottom");
+                } else if (event.key === "ArrowLeft") {
+                  frontRef.current.focus();
+                  setFace("front");
+                } else if (event.key === "ArrowRight") {
+                  backRef.current.focus();
+                  setFace("back");
+                }
+              }}
+            ></div>
+            <div
+              className={`col-start-4 col-span-1 row-start-2 row-span-1 border-2 border-black ${
+                inputFace == "back" ? "bg-black animate-opacity-fade" : ""
+              }`}
+              onClick={() => {
+                setFace("back");
+              }}
+              tabIndex={0}
+              ref={backRef}
+              onKeyDown={(event) => {
+                if (event.key === "ArrowUp") {
+                  topRef.current.focus();
+                  setFace("top");
+                } else if (event.key === "ArrowDown") {
+                  bottomRef.current.focus();
+                  setFace("bottom");
+                } else if (event.key === "ArrowLeft") {
+                  rightRef.current.focus();
+                  setFace("right");
+                } else if (event.key === "ArrowRight") {
+                  leftRef.current.focus();
+                  setFace("left");
+                }
+              }}
+            ></div>
+            <div
+              className={`col-start-2 col-span-1 row-start-3 row-span-1 border-2 border-black ${
+                inputFace == "bottom" ? "bg-black animate-opacity-fade" : ""
+              }`}
+              onClick={() => {
+                setFace("bottom");
+              }}
+              tabIndex={0}
+              ref={bottomRef}
+              onKeyDown={(event) => {
+                if (event.key === "ArrowUp") {
+                  frontRef.current.focus();
+                  setFace("front");
+                } else if (event.key === "ArrowDown") {
+                  topRef.current.focus();
+                  setFace("top");
+                } else if (event.key === "ArrowLeft") {
+                  leftRef.current.focus();
+                  setFace("left");
+                } else if (event.key === "ArrowRight") {
+                  rightRef.current.focus();
+                  setFace("right");
+                }
+              }}
+            ></div>
+          </div>
+        </div>
+
+        <div className="relative w-full h-[400px] my-2">
           <video
             ref={videoRef}
             className="w-full h-full object-cover transform scale-x-[-1]"
@@ -113,7 +276,7 @@ const CameraPopup = ({ onClose }) => {
           ></video>
 
           {/* Overlay with squares, arranged based on coordinates */}
-          <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none z-10">
+          <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
             {squares.map((square, index) => (
               <div
                 key={index}
@@ -129,7 +292,8 @@ const CameraPopup = ({ onClose }) => {
             ))}
           </div>
         </div>
-        <div className="mt-4">
+
+        <div className="">
           <button
             onClick={() => {
               stopCamera();
@@ -140,7 +304,8 @@ const CameraPopup = ({ onClose }) => {
             Stop
           </button>
         </div>
-        {results.length > 0 && (
+
+        {/* {results.length > 0 && (
           <div className="mt-4">
             <h3 className="text-black text-lg">Detected Colors:</h3>
             <ul>
@@ -152,7 +317,7 @@ const CameraPopup = ({ onClose }) => {
               ))}
             </ul>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
