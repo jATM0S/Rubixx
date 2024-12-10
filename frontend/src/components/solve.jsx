@@ -88,7 +88,12 @@ const Solve = ({ onClose }) => {
           >
             Scan the Cube
           </button>
-          {popupOpen && <CameraPopup onClose={() => setPopupOpen(false)} />}
+          {popupOpen && (
+            <CameraPopup
+              onClose={() => setPopupOpen(false)}
+              setCubeColors={setCubeColors}
+            />
+          )}
 
           {/* fillcube section */}
           <div className="my-2">

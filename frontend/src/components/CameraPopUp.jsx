@@ -1,9 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const CameraPopup = ({ onClose }) => {
+const CameraPopup = ({ onClose, setCubeColors }) => {
   const videoRef = useRef(null);
   const mediaStreamRef = useRef(null);
-  const [results, setResults] = useState([]);
   const [inputFace, setFace] = useState("front");
   const topRef = useRef(null);
   const leftRef = useRef(null);
@@ -11,6 +10,101 @@ const CameraPopup = ({ onClose }) => {
   const rightRef = useRef(null);
   const backRef = useRef(null);
   const bottomRef = useRef(null);
+
+  useEffect(() => {
+    switch (inputFace) {
+      case "top":
+        topRef.current.focus();
+        break;
+      case "left":
+        leftRef.current.focus();
+        break;
+      case "front":
+        frontRef.current.focus();
+        break;
+      case "right":
+        rightRef.current.focus();
+        break;
+      case "back":
+        backRef.current.focus();
+        break;
+      case "bottom":
+        bottomRef.current.focus();
+        break;
+      default:
+        break;
+    }
+  }, [inputFace]);
+
+  const handleKeyDown = (event, face) => {
+    event.preventDefault(); // Prevent scrolling up or down
+
+    const faceMap = {
+      front: {
+        ArrowUp: "top",
+        ArrowDown: "bottom",
+        ArrowLeft: "left",
+        ArrowRight: "right",
+      },
+      top: {
+        ArrowDown: "front",
+        ArrowLeft: "left",
+        ArrowRight: "right",
+        ArrowUp: "bottom",
+      },
+      bottom: {
+        ArrowUp: "front",
+        ArrowLeft: "left",
+        ArrowRight: "right",
+        ArrowDown: "top",
+      },
+      left: {
+        ArrowUp: "top",
+        ArrowDown: "bottom",
+        ArrowRight: "front",
+        ArrowLeft: "back",
+      },
+      right: {
+        ArrowUp: "top",
+        ArrowDown: "bottom",
+        ArrowLeft: "front",
+        ArrowRight: "back",
+      },
+      back: {
+        ArrowLeft: "right",
+        ArrowRight: "left",
+        ArrowUp: "top",
+        ArrowDown: "bottom",
+      },
+    };
+
+    const newFace = faceMap[face]?.[event.key];
+    if (newFace) {
+      setFace(newFace);
+    }
+  };
+
+  const squares = [
+    { x: 150, y: 100, size: 30 },
+    { x: 250, y: 100, size: 30 },
+    { x: 350, y: 100, size: 30 },
+    { x: 150, y: 200, size: 30 },
+    { x: 250, y: 200, size: 30 },
+    { x: 350, y: 200, size: 30 },
+    { x: 150, y: 300, size: 30 },
+    { x: 250, y: 300, size: 30 },
+    { x: 350, y: 300, size: 30 },
+  ];
+
+  // color to bg notation to represent
+  const getbg = {
+    white: "bg-white",
+    red: "bg-red-500",
+    green: "bg-green-500",
+    blue: "bg-blue-600",
+    yellow: "bg-yellow-400",
+    orange: "bg-orange-500",
+  };
 
   const startCamera = async () => {
     try {
@@ -42,18 +136,8 @@ const CameraPopup = ({ onClose }) => {
     }
   };
 
-  const squares = [
-    { x: 150, y: 100, size: 30 },
-    { x: 250, y: 100, size: 30 },
-    { x: 350, y: 100, size: 30 },
-    { x: 150, y: 200, size: 30 },
-    { x: 250, y: 200, size: 30 },
-    { x: 350, y: 200, size: 30 },
-    { x: 150, y: 300, size: 30 },
-    { x: 250, y: 300, size: 30 },
-    { x: 350, y: 300, size: 30 },
-  ];
-  const analyzeFrame = async () => {
+  const analyzeFrame = async (inputFace) => {
+    console.log(inputFace);
     if (videoRef.current) {
       const videoWidth = videoRef.current.videoWidth;
       const videoHeight = videoRef.current.videoHeight;
@@ -92,20 +176,45 @@ const CameraPopup = ({ onClose }) => {
       });
 
       const data = await response.json();
-      setResults(data);
+
+      const colors = data.colors;
+      console.log(colors);
+      const scannedColors = [];
+
+      if (colors) {
+        colors.forEach((color) => {
+          scannedColors.push(getbg[color]);
+        });
+      }
+
+      setCubeColors((prevColors) => {
+        const updatedColors = { ...prevColors };
+        updatedColors[inputFace] = scannedColors;
+        return updatedColors;
+      });
     }
   };
 
   useEffect(() => {
     startCamera();
     frontRef.current.focus();
-    // const intervalId = setInterval(analyzeFrame, 1000); // Analyze every second
 
     return () => {
-      // clearInterval(intervalId);
-      stopCamera(); // Cleanup on component unmount
+      stopCamera();
     };
   }, []);
+
+  // Separate useEffect for frame analysis
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      analyzeFrame(inputFace);
+    }, 1000); // Analyze every second
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [inputFace]);
+
 
   return (
     <div className="absolute flex items-center justify-center mt-5">
@@ -123,21 +232,7 @@ const CameraPopup = ({ onClose }) => {
               }}
               tabIndex={0}
               ref={topRef}
-              onKeyDown={(event) => {
-                if (event.key === "ArrowUp") {
-                  bottomRef.current.focus();
-                  setFace("bottom");
-                } else if (event.key === "ArrowDown") {
-                  frontRef.current.focus();
-                  setFace("front");
-                } else if (event.key === "ArrowLeft") {
-                  leftRef.current.focus();
-                  setFace("left");
-                } else if (event.key === "ArrowRight") {
-                  rightRef.current.focus();
-                  setFace("right");
-                }
-              }}
+              onKeyDown={(event) => handleKeyDown(event, "top")}
             ></div>
             <div
               className={`col-start-1 col-span-1 row-start-2 row-span-1 border-2 border-black ${
@@ -148,21 +243,7 @@ const CameraPopup = ({ onClose }) => {
               }}
               tabIndex={0}
               ref={leftRef}
-              onKeyDown={(event) => {
-                if (event.key === "ArrowUp") {
-                  topRef.current.focus();
-                  setFace("top");
-                } else if (event.key === "ArrowDown") {
-                  bottomRef.current.focus();
-                  setFace("bottom");
-                } else if (event.key === "ArrowLeft") {
-                  backRef.current.focus();
-                  setFace("back");
-                } else if (event.key === "ArrowRight") {
-                  frontRef.current.focus();
-                  setFace("front");
-                }
-              }}
+              onKeyDown={(event) => handleKeyDown(event, "left")}
             ></div>
             <div
               className={`col-start-2 col-span-1 row-start-2 row-span-1 border-2 border-black ${
@@ -173,21 +254,7 @@ const CameraPopup = ({ onClose }) => {
               }}
               tabIndex={0}
               ref={frontRef}
-              onKeyDown={(event) => {
-                if (event.key === "ArrowUp") {
-                  topRef.current.focus();
-                  setFace("top");
-                } else if (event.key === "ArrowDown") {
-                  bottomRef.current.focus();
-                  setFace("bottom");
-                } else if (event.key === "ArrowLeft") {
-                  leftRef.current.focus();
-                  setFace("left");
-                } else if (event.key === "ArrowRight") {
-                  rightRef.current.focus();
-                  setFace("right");
-                }
-              }}
+              onKeyDown={(event) => handleKeyDown(event, "front")}
             ></div>
             <div
               className={`col-start-3 col-span-1 row-start-2 row-span-1 border-2 border-black ${
@@ -198,21 +265,7 @@ const CameraPopup = ({ onClose }) => {
               }}
               tabIndex={0}
               ref={rightRef}
-              onKeyDown={(event) => {
-                if (event.key === "ArrowUp") {
-                  topRef.current.focus();
-                  setFace("top");
-                } else if (event.key === "ArrowDown") {
-                  bottomRef.current.focus();
-                  setFace("bottom");
-                } else if (event.key === "ArrowLeft") {
-                  frontRef.current.focus();
-                  setFace("front");
-                } else if (event.key === "ArrowRight") {
-                  backRef.current.focus();
-                  setFace("back");
-                }
-              }}
+              onKeyDown={(event) => handleKeyDown(event, "right")}
             ></div>
             <div
               className={`col-start-4 col-span-1 row-start-2 row-span-1 border-2 border-black ${
@@ -223,21 +276,7 @@ const CameraPopup = ({ onClose }) => {
               }}
               tabIndex={0}
               ref={backRef}
-              onKeyDown={(event) => {
-                if (event.key === "ArrowUp") {
-                  topRef.current.focus();
-                  setFace("top");
-                } else if (event.key === "ArrowDown") {
-                  bottomRef.current.focus();
-                  setFace("bottom");
-                } else if (event.key === "ArrowLeft") {
-                  rightRef.current.focus();
-                  setFace("right");
-                } else if (event.key === "ArrowRight") {
-                  leftRef.current.focus();
-                  setFace("left");
-                }
-              }}
+              onKeyDown={(event) => handleKeyDown(event, "back")}
             ></div>
             <div
               className={`col-start-2 col-span-1 row-start-3 row-span-1 border-2 border-black ${
@@ -248,21 +287,7 @@ const CameraPopup = ({ onClose }) => {
               }}
               tabIndex={0}
               ref={bottomRef}
-              onKeyDown={(event) => {
-                if (event.key === "ArrowUp") {
-                  frontRef.current.focus();
-                  setFace("front");
-                } else if (event.key === "ArrowDown") {
-                  topRef.current.focus();
-                  setFace("top");
-                } else if (event.key === "ArrowLeft") {
-                  leftRef.current.focus();
-                  setFace("left");
-                } else if (event.key === "ArrowRight") {
-                  rightRef.current.focus();
-                  setFace("right");
-                }
-              }}
+              onKeyDown={(event) => handleKeyDown(event, "bottom")}
             ></div>
           </div>
         </div>
@@ -304,20 +329,6 @@ const CameraPopup = ({ onClose }) => {
             Stop
           </button>
         </div>
-
-        {/* {results.length > 0 && (
-          <div className="mt-4">
-            <h3 className="text-black text-lg">Detected Colors:</h3>
-            <ul>
-              {results.map((result, index) => (
-                <li key={index}>
-                  Color: {result.color}, Position:{" "}
-                  {JSON.stringify(result.position)}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )} */}
       </div>
     </div>
   );
