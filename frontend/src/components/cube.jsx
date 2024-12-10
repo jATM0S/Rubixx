@@ -8,6 +8,8 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
 
   return (
     <div className={`w-2/4 h-[500px] flex flex-col justify-center opacity-100 bg-green-300 transition-opacity duration-1000	`}>
+
+      {/* toggle 3d and 2d */}
       <div className="w-full flex justify-center ">
         <div className="flex justify-evenly w-56 ">
           <button
@@ -33,6 +35,8 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
         </div>
       </div>
 
+
+      {/* cube */}
       <div
         className={`${
           typeOfCube == "3d" ? "h-[381px]" : "h-[430px]"
@@ -172,7 +176,9 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
           </div>
         </div>
       </div>
-
+      
+      
+      {/* manuver 3d cube */}
       <div
         className={`${
           hidden ? "hidden" : ""
