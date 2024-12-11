@@ -80,14 +80,18 @@ const Solve = ({ onClose }) => {
           currentColor={currentColor}
           setCubeColors={setCubeColors}
         />
+
+
         {/* menu */}
-        <div className=" flex flex-col justify-center bg-white">
+        <div className="flex flex-col justify-center bg-white w-auto">
           <button
             onClick={() => setPopupOpen(true)}
             className="bg-blue-600 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
           >
             Scan the Cube
           </button>
+
+
           {popupOpen && (
             <CameraPopup
               onClose={() => setPopupOpen(false)}
@@ -95,7 +99,7 @@ const Solve = ({ onClose }) => {
             />
           )}
 
-          {/* fillcube section */}
+          {/* fillcube colors section */}
           <div className="my-2">
             <p className=" text-white font-bold text-lg select-none my-2 px-3 ">
               Fill Cube:
@@ -103,44 +107,48 @@ const Solve = ({ onClose }) => {
 
             {/* colors */}
             <div
-              className={`${currentColor} border-2 border-black p-3 mb-2 rounded-3xl flex align-middle justify-center`}
+              className={`${currentColor} border-2 border-black p-3 mb-2 rounded-3xl flex align-middle justify-center flex-wrap`}
             >
-              <div
-                className="bg-blue-600 border-2 border-black h-14 w-14 rounded-2xl mx-2"
-                onClick={() => {
-                  setCurrentColor("bg-blue-600");
-                }}
-              ></div>
-              <div
-                className="bg-green-500 border-2 border-black h-14 w-14 rounded-2xl mx-2"
-                onClick={() => {
-                  setCurrentColor("bg-green-500");
-                }}
-              ></div>
-              <div
-                className="bg-red-500 border-2 border-black h-14 w-14 rounded-2xl mx-2"
-                onClick={() => {
-                  setCurrentColor("bg-red-500");
-                }}
-              ></div>
-              <div
-                className="bg-orange-500 border-2 border-black h-14 w-14 rounded-2xl mx-2"
-                onClick={() => {
-                  setCurrentColor("bg-orange-500");
-                }}
-              ></div>
-              <div
-                className="bg-yellow-400 border-2 border-black h-14 w-14 rounded-2xl mx-2"
-                onClick={() => {
-                  setCurrentColor("bg-yellow-400");
-                }}
-              ></div>
-              <div
-                className="bg-white border-2 border-black h-14 w-14 rounded-2xl mx-2"
-                onClick={() => {
-                  setCurrentColor("bg-white");
-                }}
-              ></div>
+              <div className="">
+                <div
+                  className="bg-blue-600 border-2 border-black h-14 w-14 rounded-2xl mx-2 inline-block"
+                  onClick={() => {
+                    setCurrentColor("bg-blue-600");
+                  }}
+                ></div>
+                <div
+                  className="bg-green-500 border-2 border-black h-14 w-14 rounded-2xl mx-2 inline-block"
+                  onClick={() => {
+                    setCurrentColor("bg-green-500");
+                  }}
+                ></div>
+                <div
+                  className="bg-red-500 border-2 border-black h-14 w-14 rounded-2xl mx-2 inline-block"
+                  onClick={() => {
+                    setCurrentColor("bg-red-500");
+                  }}
+                ></div>
+              </div>
+              <div className="">
+                <div
+                  className="bg-orange-500 border-2 border-black h-14 w-14 rounded-2xl mx-2 inline-block"
+                  onClick={() => {
+                    setCurrentColor("bg-orange-500");
+                  }}
+                ></div>
+                <div
+                  className="bg-yellow-400 border-2 border-black h-14 w-14 rounded-2xl mx-2 inline-block"
+                  onClick={() => {
+                    setCurrentColor("bg-yellow-400");
+                  }}
+                ></div>
+                <div
+                  className="bg-white border-2 border-black h-14 w-14 rounded-2xl mx-2 inline-block"
+                  onClick={() => {
+                    setCurrentColor("bg-white");
+                  }}
+                ></div>
+              </div>
               <div
                 className="py-4 bg-gray-500 text-white select-none h-14 w-14 rounded-2xl mx-2 text-center"
                 onClick={() => {
@@ -176,6 +184,9 @@ const Solve = ({ onClose }) => {
           </button>
         </div>
       </div>
+
+
+
       <div className="">
         <p className="text-white">
           {response.sequence?.length > 0
