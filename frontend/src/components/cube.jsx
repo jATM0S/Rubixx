@@ -7,8 +7,9 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
   const [hidden, setHidden] = useState(false);
 
   return (
-    <div className={`w-2/4 h-[500px] flex flex-col justify-center opacity-100 bg-green-300 transition-opacity duration-1000	`}>
-
+    <div
+      className={`w-[650px] h-[500px] flex flex-col justify-center opacity-100 bg-green-300`}
+    >
       {/* toggle 3d and 2d */}
       <div className="w-full flex justify-center ">
         <div className="flex justify-evenly w-56 ">
@@ -35,21 +36,25 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
         </div>
       </div>
 
-
       {/* cube */}
       <div
         className={`${
           typeOfCube == "3d" ? "h-[381px]" : "h-[430px]"
-        } w-full flex justify-center items-center`}
+        } w-full flex justify-center items-center  bg-blue-400 `}
       >
+        {/* cube div */}
         <div
-          className={`cube${typeOfCube} w-2 h-2`}
+          className={`cube${typeOfCube} h-32 w-32`}
           style={{
             transform: `rotateX(-30deg) rotateY(${rotation.y}deg) rotateZ(${rotation.z}deg)`,
           }}
         >
           <div
-            className={`face${typeOfCube} front${typeOfCube} grid grid-cols-3 gap-0 border-2 select-none`}
+            className={`${
+              typeOfCube == "2d"
+                ? "absolute border border-black ease-in-out duration-1000 w-28 h-28 rotate-90 -translate-y-14 sm:h-[144px] sm:w-[144px] sm:rotate-0 sm:translate-x-[-80px] sm:translate-y-0"
+                : `front${typeOfCube} face${typeOfCube}`
+            } grid grid-cols-3 gap-0 border-2 select-none`}
           >
             {Array(9)
               .fill(null)
@@ -69,8 +74,13 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                 </div>
               ))}
           </div>
+
           <div
-            className={`face${typeOfCube} back${typeOfCube} grid grid-cols-3 gap-0 border-2 select-none `}
+            className={`${
+              typeOfCube == "2d"
+                ? "absolute border border-black ease-in-out duration-1000  w-28 h-28 rotate-90 translate-y-[184px] sm:h-[144px] sm:w-[144px] sm:rotate-0 sm:translate-x-[240px] sm:translate-y-0"
+                : `back${typeOfCube} face${typeOfCube}`
+            } grid grid-cols-3 gap-0 border-2 select-none `}
           >
             {Array(9)
               .fill(null)
@@ -90,8 +100,13 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                 </div>
               ))}
           </div>
+
           <div
-            className={`face${typeOfCube} left${typeOfCube} grid grid-cols-3 gap-0 border-2 select-none`}
+            className={`${
+              typeOfCube == "2d"
+                ? "absolute border border-black ease-in-out duration-1000  w-28 h-28 rotate-90 -translate-y-44 sm:h-[144px] sm:w-[144px] sm:rotate-0 sm:-translate-x-[240px] sm:translate-y-0"
+                : `left${typeOfCube} face${typeOfCube}`
+            } grid grid-cols-3 gap-0 border-2 select-none`}
           >
             {Array(9)
               .fill(null)
@@ -111,8 +126,13 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                 </div>
               ))}
           </div>
+
           <div
-            className={`face${typeOfCube} right${typeOfCube} grid grid-cols-3 gap-0 border-2 select-none`}
+            className={`${
+              typeOfCube == "2d"
+                ? "absolute border border-black ease-in-out duration-1000  w-28 h-28 rotate-90 translate-y-16 sm:h-[144px] sm:w-[144px] sm:rotate-0 sm:translate-x-[80px] sm:translate-y-0 "
+                : `right${typeOfCube} face${typeOfCube} `
+            } grid grid-cols-3 gap-0 border-2 select-none`}
           >
             {Array(9)
               .fill(null)
@@ -132,8 +152,13 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                 </div>
               ))}
           </div>
+
           <div
-            className={`face${typeOfCube} top${typeOfCube} grid grid-cols-3 gap-0 border-2 select-none`}
+            className={`${
+              typeOfCube == "2d"
+                ? "absolute border border-black ease-in-out duration-1000  w-28 h-28 rotate-90 translate-x-[120px] -translate-y-14 sm:h-[144px] sm:w-[144px] sm:rotate-0 sm:-translate-x-[80px] sm:-translate-y-[160px]"
+                : `top${typeOfCube} face${typeOfCube}`
+            } grid grid-cols-3 gap-0 border-2 select-none`}
           >
             {Array(9)
               .fill(null)
@@ -153,8 +178,13 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
                 </div>
               ))}
           </div>
+
           <div
-            className={`face${typeOfCube} bottom${typeOfCube} grid grid-cols-3 gap-0 border-2 select-none`}
+            className={`${
+              typeOfCube == "2d"
+                ? "absolute border border-black ease-in-out duration-1000 w-28 h-28 rotate-90 -translate-x-[120px] -translate-y-14 sm:h-[144px] sm:w-[144px] sm:rotate-0 sm:-translate-x-[80px] sm:translate-y-[160px]"
+                : `bottom${typeOfCube} face${typeOfCube}`
+            } grid grid-cols-3 gap-0 border-2 select-none`}
           >
             {Array(9)
               .fill(null)
@@ -176,8 +206,7 @@ const Cube = ({ cubeColors, currentColor, setCubeColors }) => {
           </div>
         </div>
       </div>
-      
-      
+
       {/* manuver 3d cube */}
       <div
         className={`${

@@ -38,39 +38,3 @@
   transform: rotateX(-90deg) translateZ(6rem);
 }
 
-.cube2d {
-  translate:-5rem -3rem;
-  gap: 0;
-}
-
-.face2d {
-  position: absolute;
-  border: 1px solid black;
-  width: 9rem;
-  height: 9rem;
-  transition: transform 0.5s ease-in-out; 
-}
-
-.front2d {
-  transform: translate(-4rem, 0);
-}
-
-.left2d {
-  transform: translate(-14rem, 0);
-}
-
-.right2d {
-  transform: translate(6rem, 0);
-}
-
-.back2d {
-  transform: translate(16rem, 0);
-}
-
-.top2d {
-  transform: translate(-4rem, -10rem);
-}
-
-.bottom2d {
-  transform: translate(-4rem, 10rem);
-}
