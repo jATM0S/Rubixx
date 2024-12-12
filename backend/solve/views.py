@@ -7,7 +7,7 @@ from . import randomize
 from . import moves
 @csrf_exempt
 def solve_cube_view(request):
-    if request.method == "GET":
+    if request.method == "POST":
         # Get the Rubik's Cube configuration from the query parameters or from the body
         data=json.loads(request.body)
         rubiks_cube = data.get('rubiks_cube')  
