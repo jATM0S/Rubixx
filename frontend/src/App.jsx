@@ -9,6 +9,7 @@ import Solve from "./components/solve";
 const App = () => {
   const faqRef = useRef(null);
   const quizRef = useRef(null);
+  const solveRef = useRef(null);
 
   const scrollToFAQ = () => {
     faqRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -18,14 +19,27 @@ const App = () => {
     quizRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const scrollToSolve = () => {
+    solveRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <Router>
       <div className="bg-black">
-        <Nav onFAQClick={scrollToFAQ} onQuizClick={scrollToQuiz} />
-
+        <Nav
+          onFAQClick={scrollToFAQ}
+          onQuizClick={scrollToQuiz}
+          onSolveCLick={scrollToSolve}
+        />
         <Routes>
           <Route path="/" element={<Banner />} />
-          <Route path="/solve" element={<Solve />} />
+          <Route
+            path="/solve"
+            element={
+              <div ref={solveRef} className="section">
+                <Solve />
+              </div>
+            }
+          />
         </Routes>
 
         <div ref={faqRef} className="section">

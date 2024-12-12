@@ -1,9 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "./cube.css";
 import Cube from "./cube";
 import CameraPopup from "./CameraPopUp";
-
+import { FaArrowLeft } from "react-icons/fa";
 const Solve = ({ onClose }) => {
+  const navigate = useNavigate();
+
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupVisible, setVisibility] = useState(false);
 
@@ -19,7 +23,7 @@ const Solve = ({ onClose }) => {
     top: [...initialFaceColors],
     bottom: [...initialFaceColors],
   });
-  const [response, setResponse] = useState({
+  const [solve_response, setResponse] = useState({
     sequence: [],
     is_solved: true,
     error: "",
@@ -62,8 +66,12 @@ const Solve = ({ onClose }) => {
         }),
       });
       const data = await response.json();
-      console.log(data);
       setResponse(data);
+
+      if (!solve_response.is_solved) {
+        console.log(solve_response);
+        setVisibility(true);
+      }
     } catch (error) {
       setResponse((prev) => {
         [], false, "Fetch error";
@@ -72,7 +80,38 @@ const Solve = ({ onClose }) => {
   };
 
   return (
-    <div className="py-16 bg-blue-400">
+    <div className="py-16 bg-black">
+      <div className="fixed top-4 left-4">
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 text-white bg-transparent p-2 rounded hover:scale-110 transition duration-300 ease-in-out"
+        >
+          <FaArrowLeft /> Back
+        </button>
+      </div>
+      {/* error div */}
+      <div
+        className={`h-screen w-screen fixed flex justify-center items-center inset-0 z-10 bg-black/50 ${
+          popupVisible ? "" : "hidden"
+        }`}
+        onClick={() => setVisibility(false)}
+      >
+        <button
+          onClick={() => setVisibility(false)}
+          className="absolute top-[calc(50%-70px)] right-[calc(40%-10px)] text-red-500 hover:text-red-600 z-20 transition duration-300 text-3xl "
+        >
+          &times;
+        </button>
+
+        {/* Popup Container */}
+        <div
+          className="relative p-6 bg-white border border-red-600 rounded-md shadow-md"
+          onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
+        >
+          {solve_response.error}
+        </div>
+      </div>
+
       <div className="flex justify-evenly flex-wrap bg-blue-600">
         {/*cube */}
         <Cube
@@ -80,7 +119,6 @@ const Solve = ({ onClose }) => {
           currentColor={currentColor}
           setCubeColors={setCubeColors}
         />
-
 
         {/* menu */}
         <div className="flex flex-col justify-center bg-white w-auto">
@@ -90,7 +128,6 @@ const Solve = ({ onClose }) => {
           >
             Scan the Cube
           </button>
-
 
           {popupOpen && (
             <CameraPopup
@@ -177,7 +214,9 @@ const Solve = ({ onClose }) => {
 
           {/* sends the cube notation to solve */}
           <button
-            onClick={solve_cube}
+            onClick={() => {
+              solve_cube();
+            }}
             className="bg-blue-600 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
           >
             Solve the Cube
@@ -185,13 +224,11 @@ const Solve = ({ onClose }) => {
         </div>
       </div>
 
-
-
       <div className="">
         <p className="text-white">
-          {response.sequence?.length > 0
-            ? response.sequence.join(" ")
-            : response.error}
+          {solve_response.sequence?.length > 0
+            ? solve_response.sequence.join(" ")
+            : ""}
         </p>
       </div>
     </div>
