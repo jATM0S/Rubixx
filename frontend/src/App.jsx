@@ -1,13 +1,14 @@
 import React, { useRef } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Faq from "./components/faq";
 import Banner from "./components/banner";
 import Quiz from "./components/quiz";
 import Nav from "./components/nav";
+import Solve from "./components/solve";
 
 const App = () => {
   const faqRef = useRef(null);
   const quizRef = useRef(null);
-  const scanRef = useRef(null);
 
   const scrollToFAQ = () => {
     faqRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -16,30 +17,26 @@ const App = () => {
   const scrollToQuiz = () => {
     quizRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-  const scrollToScan = () => {
-    scanRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
-    <div>
-      <Nav
-        onFAQClick={scrollToFAQ}
-        onQuizClick={scrollToQuiz}
-        onScanClick={scrollToScan}
-      />
+    <Router>
+      <div className="bg-black">
+        <Nav onFAQClick={scrollToFAQ} onQuizClick={scrollToQuiz} />
 
-      <div ref={scanRef} className="section">
-        <Banner />
-      </div>
+        <Routes>
+          <Route path="/" element={<Banner />} />
+          <Route path="/solve" element={<Solve />} />
+        </Routes>
 
-      <div ref={faqRef} className="section">
-        <Faq />
-      </div>
+        <div ref={faqRef} className="section">
+          <Faq />
+        </div>
 
-      <div ref={quizRef} className="section">
-        <Quiz />
+        <div ref={quizRef} className="section">
+          <Quiz />
+        </div>
       </div>
-    </div>
+    </Router>
   );
 };
 
