@@ -300,7 +300,7 @@ const CameraPopup = ({ onClose, setCubeColors }) => {
           ></video>
 
           {/* Overlay with squares, arranged based on coordinates */}
-          <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
+          <div className="absolute -left-16 md:left-0 inset-0 flex flex-col justify-center items-center pointer-events-none">
             {squares.map((square, index) => (
               <div
                 key={index}
