@@ -32,7 +32,6 @@ def scan():
     data = request.json
     image_data = data['image']
     
-    # Decode the base64 image
     img_data = base64.b64decode(image_data)
     img_array = np.frombuffer(img_data, np.uint8)
     frame = cv2.imdecode(img_array, cv2.IMREAD_COLOR)

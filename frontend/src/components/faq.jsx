@@ -1,32 +1,28 @@
 import React from "react";
-import step1Image from "./../assets/home.jpg"; // Replace with your actual image paths
-import step2Image from "./../assets/home.jpg";
+import step1 from "./../assets/step1.png";
+import step2 from "./../assets/step2.png";
 import step3Image from "./../assets/home.jpg";
 import step4Image from "./../assets/home.jpg";
 
 const steps = [
   {
-    step: "Step 1: Scan your cube.",
-    image: step1Image,
+    step: "Step 1: Select a suitable view (3D or 2D) for scanning. Ensure the system mirrors colors as you view them. Change the face above the camera to scan all sides.",
+    image: step1,
   },
   {
-    step: "Step 2: Turn your cube as directed to scan all 6 faces.",
-    image: step2Image,
+    step: "Step 2: Save all scanned faces and verify the colors. Manually correct any errors caused by lighting.",
+    image: step2,
   },
   {
-    step: "Step 3: Follow the steps provided by Rubixx.",
+    step: "Step 3: Confirm the setup, then click 'Solve the Cube.'",
     image: step3Image,
   },
   {
-    step: "More steps...",
+    step: "Step 4: Follow the on-screen steps to solve the cube.",
     image: step3Image,
   },
   {
-    step: "More steps...",
-    image: step3Image,
-  },
-  {
-    step: "Congrats! You just solved your first Rubik's Cube!",
+    step: "Step 5: Congratulations! Your cube is solved. Note: Altered cubes may not be solvable.",
     image: step4Image,
   },
 ];
