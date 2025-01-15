@@ -171,7 +171,6 @@ const Solve = ({ onClose }) => {
       "bg-orange-500": "O",
       "bg-yellow-400": "Y",
     };
-    console.log(cubeColors);
     const rubiks_cube_notation = {};
 
     Object.keys(cubeColors).forEach((face, faceNo) => {
@@ -189,6 +188,39 @@ const Solve = ({ onClose }) => {
       const cube = getRubiks_cube(cubeColors);
       console.log(cube);
       const response = await fetch("http://127.0.0.1:8000/solve/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          rubiks_cube: cube,
+        }),
+      });
+      const data = await response.json();
+      setResponse(data);
+      console.log(data);
+      if (!data.is_solved) {
+        console.log(solve_response);
+        setVisibility(true);
+      } else if (data.is_solved && data.sequence.length === 0) {
+        setAlert({ message: "Cube is already solved!", visible: true });
+      } else if (data.is_solved && data.sequence.length !== 0) {
+        setAlert({
+          message: "Solved!!! Scroll down to see steps",
+          visible: true,
+        });
+      }
+    } catch (error) {
+      setResponse((prev) => {
+        [], false, "Fetch error";
+      });
+    }
+  };
+  const solve_kociemba = async () => {
+    try {
+      const cube = getRubiks_cube(cubeColors);
+      console.log(cube);
+      const response = await fetch("http://127.0.0.1:8000/solve_kociemba/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -267,21 +299,19 @@ const Solve = ({ onClose }) => {
         />
 
         {/* menu */}
-        <div className="flex flex-col justify-center rounded-2xl w-auto">
+        <div className="flex flex-col justify-center rounded-2xl w-auto bg-gray-900 p-4">
           <button
             onClick={() => setPopupOpen(true)}
             className="bg-blue-600 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
           >
             Scan the Cube
           </button>
-
           {popupOpen && (
             <CameraPopup
               onClose={() => setPopupOpen(false)}
               setCubeColors={setCubeColors}
             />
           )}
-
           {/* fillcube colors section */}
           <FillCube
             setCubeColors={setCubeColors}
@@ -289,19 +319,31 @@ const Solve = ({ onClose }) => {
             setCurrentColor={setCurrentColor}
             initialFaceColors={initialFaceColors}
           />
-
           {/* sends the cube notation to solve */}
-          <button
-            onClick={() => {
-              solve_cube();
-            }}
-            className="bg-blue-600 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
-          >
-            Solve the Cube
-          </button>
+          <p className=" text-white font-bold text-lg select-none my-2 px-3 ">
+            Solve :
+          </p>
+          <div className="flex justify-center gap-x-6">
+            <button
+              onClick={() => {
+                solve_cube();
+              }}
+              className="bg-blue-600 w-1/3 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
+            >
+              Solve <sub>(LayerByLayer)</sub>
+            </button>
+            <button
+              onClick={() => {
+                solve_kociemba();
+              }}
+              className="bg-blue-600 w-1/3 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
+            >
+              Solve <sub>(Kociemba)</sub>
+            </button>
+          </div>
           <button
             onClick={() => navigate("/virtualcube", { state: { cubeColors } })}
-            className="bg-blue-600 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
+            className="bg-blue-600 text-white py-2 px-6 my-2 rounded hover:bg-gray-700 transition duration-300"
           >
             Virtual Cube
           </button>
