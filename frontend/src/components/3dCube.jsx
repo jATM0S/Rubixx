@@ -221,58 +221,31 @@ const Cube3D = ({ cubeColors, initialFaceColors, sequence }) => {
     };
   }, []);
 
-  // const playMove = async (moveIndex) => {
-  //   if (moveIndex >= sequence.length) {
-  //     setIsPlaying(false);
-  //     return;
-  //   }
-
-  //   const move = sequence[moveIndex];
-  //   moveQueueRef.current.push(moveNotationTo3d[move]);
-  //   setDisplayMove(move.toUpperCase());
-
-  //   if (!isRotatingRef.current) {
-  //     await processNextMove();
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   let timeoutId;
-
-  //   const executeNextMove = async () => {
-  //     if (isPlaying && currentMoveIndex < sequence.length) {
-  //       await playMove(currentMoveIndex);
-  //       timeoutId = setTimeout(() => {
-  //         setCurrentMoveIndex((prev) => prev + 1);
-  //       }, 500);
-  //     } else if (currentMoveIndex >= sequence.length) {
-  //       setIsPlaying(false);
-  //     }
-  //   };
-
-  //   if (isPlaying) {
-  //     executeNextMove();
-  //   }
-
-  //   return () => {
-  //     if (timeoutId) {
-  //       clearTimeout(timeoutId);
-  //     }
-  //   };
-  // }, [isPlaying, currentMoveIndex, sequence.length]);
-
   const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-
-    setTimeout(moveForward(), 300);
+    if (currentMoveIndex >= sequence.length) {
+      return;
+    }
+    setIsPlaying((prevState) => !prevState);
   };
 
-  // const moveForward = async () => {
-  //   if (currentMoveIndex < sequence.length) {
-  //     await playMove(currentMoveIndex);
-  //     setCurrentMoveIndex((prev) => prev + 1);
-  //   }
-  // };
+  useEffect(() => {
+    if (!isPlaying) {
+      return;
+    }
+
+    const executeMoves = () => {
+      if (currentMoveIndex < sequence.length) {
+        moveForward();
+      } else {
+        setIsPlaying(false); // Stop playing if the sequence is completed
+      }
+    };
+
+    // Schedule the next move
+    const timeoutId = setTimeout(executeMoves, 500);
+
+    return () => clearTimeout(timeoutId); // Cleanup on effect re-run or unmount
+  }, [isPlaying, currentMoveIndex]);
 
   const moveBackward = () => {
     if (currentMoveIndex > 0) {
@@ -286,7 +259,6 @@ const Cube3D = ({ cubeColors, initialFaceColors, sequence }) => {
   };
   const moveForward = () => {
     if (currentMoveIndex < sequence.length) {
-      console.log("something");
       const nextMove = sequence[currentMoveIndex];
       setCurrentMoveIndex((prev) => prev + 1);
       const move = moveNotationTo3d[nextMove];
