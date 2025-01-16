@@ -57,6 +57,26 @@ const Cube3D = ({ cubeColors, initialFaceColors, sequence }) => {
     rotateLeft: { axis: "y" },
   };
 
+  // instruction for moves 
+  const moveToInstruction = {
+    F: "(Rotate the front face clockwise)",
+    "F'": "(Rotate the front face anticlockwise)",
+    R: "(Rotate the right face clockwise)",
+    "R'": "(Rotate the right face anticlockwise)",
+    U: "(Rotate the top face clockwise)",
+    "U'": "(Rotate the top face anticlockwise)",
+    D: "(Rotate the bottom face clockwise)",
+    "D'": "(Rotate the bottom face anticlockwise)",
+    L: "(Rotate the left face clockwise)",
+    "L'": "(Rotate the left face anticlockwise)",
+    B: "(Rotate the back face clockwise)",
+    "B'": "(Rotate the back face anticlockwise)",
+    RR: "(Rotate the cube right)",
+    RL: "(Rotate the cube left)",
+    RD: "(Rotate the cube down)",
+    RU: "(Rotate the cube up)",
+  };
+
   const cPositions = [-1, 0, 1];
 
   const init = () => {
@@ -255,6 +275,8 @@ const Cube3D = ({ cubeColors, initialFaceColors, sequence }) => {
       const reverseMove = moveNotationTo3d[opposisteMove];
       setDisplayMove(opposisteMove.toUpperCase());
       moves(reverseMove.position, reverseMove.direction);
+    } else {
+      setErrorAlert({ message: "No backmove exists!!!", visible: true });
     }
   };
   const moveForward = () => {
@@ -264,6 +286,8 @@ const Cube3D = ({ cubeColors, initialFaceColors, sequence }) => {
       const move = moveNotationTo3d[nextMove];
       setDisplayMove(nextMove.toUpperCase());
       moves(move.position, move.direction);
+    } else {
+      setAlert({ message: "Cube Solved!!!", visible: true });
     }
   };
 
@@ -283,7 +307,9 @@ const Cube3D = ({ cubeColors, initialFaceColors, sequence }) => {
       />
       {/* Current Move Display */}
       <div className="text-lg font-semibold text-white my-4">
-        {`Current Move: ${displayMove}`}
+        {`Current Move: ${displayMove}${
+          displayMove !== "None" ? ` ${moveToInstruction[displayMove]}` : ""
+        }`}
       </div>
 
       <div className="flex flex-wrap justify-center gap-4 m-4">

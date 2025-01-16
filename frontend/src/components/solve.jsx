@@ -14,6 +14,7 @@ const Solve = ({ onClose }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupVisible, setVisibility] = useState(false);
   const [alert, setAlert] = useState({ message: "", visible: false });
+  const [cube3DKey, setCube3DKey] = useState(0);
 
   //selected color to fill
   const [currentColor, setCurrentColor] = useState("bg-white");
@@ -199,6 +200,7 @@ const Solve = ({ onClose }) => {
       const data = await response.json();
       setResponse(data);
       console.log(data);
+      setCube3DKey((prev) => prev + 1); // Update cube3DKey to force re-render
       if (!data.is_solved) {
         console.log(solve_response);
         setVisibility(true);
@@ -230,6 +232,7 @@ const Solve = ({ onClose }) => {
         }),
       });
       const data = await response.json();
+      setCube3DKey((prev) => prev + 1); // Update cube3DKey to force re-render
       setResponse(data);
       console.log(data);
       if (!data.is_solved) {
@@ -299,10 +302,10 @@ const Solve = ({ onClose }) => {
         />
 
         {/* menu */}
-        <div className="flex flex-col justify-center rounded-2xl w-auto bg-gray-900 p-4">
+        <div className="flex flex-col justify-center items-center rounded-2xl w-auto bg-gray-900 p-4">
           <button
             onClick={() => setPopupOpen(true)}
-            className="bg-blue-600 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
+            className="bg-blue-600 w-full text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
           >
             Scan the Cube
           </button>
@@ -319,34 +322,40 @@ const Solve = ({ onClose }) => {
             setCurrentColor={setCurrentColor}
             initialFaceColors={initialFaceColors}
           />
+
           {/* sends the cube notation to solve */}
-          <p className=" text-white font-bold text-lg select-none my-2 px-3 ">
-            Solve :
-          </p>
-          <div className="flex justify-center gap-x-6">
+          <div className="w-full">
+            <p className=" text-white font-bold text-lg select-none my-2 px-3 ">
+              Solve :
+            </p>
+
+            <div className="flex justify-center gap-x-6">
+              <button
+                onClick={() => {
+                  solve_cube();
+                }}
+                className="bg-blue-600 w-1/3 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
+              >
+                Solve (LBL)
+              </button>
+              <button
+                onClick={() => {
+                  solve_kociemba();
+                }}
+                className="bg-blue-600 w-1/3 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
+              >
+                Solve (Kociemba)
+              </button>
+            </div>
             <button
-              onClick={() => {
-                solve_cube();
-              }}
-              className="bg-blue-600 w-1/3 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
+              onClick={() =>
+                navigate("/virtualcube", { state: { cubeColors } })
+              }
+              className="bg-blue-600 w-full sm:w-[380px] sm:ml-[76px] text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
             >
-              Solve <sub>(LayerByLayer)</sub>
-            </button>
-            <button
-              onClick={() => {
-                solve_kociemba();
-              }}
-              className="bg-blue-600 w-1/3 text-white py-2 px-6 my-2 rounded hover:bg-blue-700 transition duration-300"
-            >
-              Solve <sub>(Kociemba)</sub>
+              Virtual Cube
             </button>
           </div>
-          <button
-            onClick={() => navigate("/virtualcube", { state: { cubeColors } })}
-            className="bg-blue-600 text-white py-2 px-6 my-2 rounded hover:bg-gray-700 transition duration-300"
-          >
-            Virtual Cube
-          </button>
         </div>
       </div>
 
@@ -354,13 +363,13 @@ const Solve = ({ onClose }) => {
         <>
           {/* solution container */}
           <div className="h-auto w-full  flex flex-col justify-center align-middle">
-            <p className=" text-white font-bold text-lg select-none my- px-3 ">
+            <p className=" text-white font-bold text-lg select-none px-12 ">
               Solve Sequence:
             </p>
-            <div className="h-auto w-auto  pb-4 pl-16">
+            <div className="h-auto w-auto  pb-4 pl-12 pr-6">
               <p className="text-white text-xl">
                 {solve_response.sequence?.length > 0
-                  ? solve_response.sequence.join("  ").toUpperCase()
+                  ? solve_response.sequence.join(" ").toUpperCase()
                   : ""}
               </p>
             </div>
@@ -370,6 +379,7 @@ const Solve = ({ onClose }) => {
               Show steps
             </button>
             <Cube3D
+              key={cube3DKey} // Add the key to force re-render
               cubeColors={cubeColors}
               initialFaceColors={initialFaceColors}
               sequence={solve_response.sequence}

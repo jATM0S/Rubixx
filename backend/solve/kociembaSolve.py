@@ -1,5 +1,5 @@
 import kociemba
-
+from . import validate
 
 def transform_format(moves):
     result = []
@@ -16,6 +16,10 @@ def transform_format(moves):
 def kociemba_solve(rubiks_cube):
     sequence = []
     # turn the rubiks notation to kociemba compatible notation
+
+    solvable,error=validate.checkCube(rubiks_cube)
+    if solvable==False:return [],False,error
+
     # 1 take the centers of the cube
     color_to_notation = {
         rubiks_cube["B5"]: "B",

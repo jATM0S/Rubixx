@@ -225,7 +225,7 @@ const VirtualCube = () => {
   return (
     <div className="flex flex-col md:flex-row md:h-screen w-full pt-16 ">
       <div ref={mountRef} className="w-full md:w-2/3 h-[60vh] md:h-full" />
-      <div className="w-full md:w-1/3 p-4 bg-gray-900 rounded-l-3xl flex flex-col justify-center ">
+      <div className="w-full md:w-1/3 p-4 bg-gray-900 rounded-3xl flex flex-col justify-center ">
         <div className="grid grid-cols-3 gap-4 p-4 bg-black bg-opacity-50 rounded-lg">
           <button
             className="h-12 text-lg font-semibold text-white bg-gray-800 rounded hover:bg-gray-700 active:bg-gray-900 "
